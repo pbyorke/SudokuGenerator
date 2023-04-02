@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct SudokuGeneratorApp: App {
+    
+    @StateObject private var vm = ViewModel.shared
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(vm)
         }
     }
 }
