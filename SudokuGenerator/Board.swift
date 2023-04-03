@@ -28,7 +28,6 @@ struct Board: View {
             ForEach(rows, id: \.id) {
                 $0
             }
-            Spacer()
         }
     }
     
@@ -46,7 +45,7 @@ struct Board: View {
         rows[row].dump()
     }
     
-    /// tell a row to tell a Cell to dump itself
+    /// tell a row to tell a Cell to dump itselfØ
     /// - Parameters:
     ///   - row: Row number
     ///   - col: Cell number

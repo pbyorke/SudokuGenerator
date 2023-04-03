@@ -15,6 +15,7 @@ struct ContentView: View {
         
         VStack {
             vm.board
+            Spacer()
         }
         .padding(.top)
     }

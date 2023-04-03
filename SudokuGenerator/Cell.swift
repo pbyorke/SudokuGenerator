@@ -12,15 +12,14 @@ struct Cell: View, Identifiable {
     @EnvironmentObject private var vm: ViewModel
     
     let id: Int
-    let rowNumber: Int
-    let colNumber: Int
-    private var value: Int { vm.data[rowNumber][colNumber] }
-    
-    /// initialze the Cell, storing the Row number and Cell number
-    init(_ rowNumber: Int, _ colNumber: Int) {
-        self.rowNumber = rowNumber
-        self.colNumber = colNumber
-        self.id = rowNumber * 9 + colNumber
+    let pos: (row: Int, col: Int)
+    private var value: Int { vm.data[pos.row][pos.col] }
+
+    /// initialized the Cell, storing its row and column
+    /// - Parameter pos: tuple containing (row, col)
+    init(_ pos: (row: Int, col: Int)) {
+        self.pos = pos
+        self.id = pos.row * 9 + pos.col
     }
     
     /// required body. Display a number if >0, else black
@@ -28,12 +27,19 @@ struct Cell: View, Identifiable {
         Text(value == 0 ? " " : "\(value)")
             .frame(width: 30, height: 30)
             .font(.system(size: 24))
-            .border(.black)
+            .overlay(
+                vm.isSelected(self)
+                ? RoundedRectangle(cornerRadius: 5).stroke(Color.red, lineWidth: 4)
+                : RoundedRectangle(cornerRadius: 5).stroke(Color.black, lineWidth: 1)
+            )
+            .onTapGesture {
+                vm.tap(self)
+            }
     }
     
     /// dump the contents of this Cell
     func dump() {
-        print("* * *    Cell row \(rowNumber) col \(colNumber) data \(value)")
+        print("* * *    Cell pos (\(pos.row), \(pos.col)) data \(value))")
     }
     
 }
@@ -42,7 +48,7 @@ struct Cell: View, Identifiable {
 
 struct Cell_Previews: PreviewProvider {
     static var previews: some View {
-        Cell(0, 0)
+        Cell((0, 0))
             .environmentObject(ViewModel.shared)
     }
 }

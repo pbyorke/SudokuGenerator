@@ -12,16 +12,16 @@ struct Row: View, Identifiable {
     @EnvironmentObject private var vm: ViewModel
     
     let id: Int
-    let rowNumber: Int
+    let row: Int
     let cells: [Cell]
     
     /// initialze the Row by buildijng an array of Cells
-    init(_ rowNumber: Int) {
-        self.rowNumber = rowNumber
-        self.id = rowNumber * 9
+    init(_ row: Int) {
+        self.row = row
+        self.id = row * 9
         var array = [Cell]()
         for i in 0...8 {
-            array.append(Cell(rowNumber, i))
+            array.append(Cell((row, i)))
         }
         self.cells = array
     }
@@ -42,7 +42,7 @@ struct Row: View, Identifiable {
     
     /// dump the whole Row
     func dump() {
-        print("* * *   Row \(rowNumber)")
+        print("* * *   Row \(row)")
         for cell in cells {
             cell.dump()
         }
