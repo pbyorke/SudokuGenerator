@@ -15,6 +15,20 @@ struct ContentView: View {
         
         VStack {
             vm.board
+            Button {
+                vm.shuffle()
+            } label: {
+                HStack {
+                    Text("Shuffle")
+                        .font(.title)
+                        .padding()
+                        .foregroundColor(.white)
+                        .background(Color.green)
+                    Spacer()
+                }
+                .padding()
+            }
+
             Spacer()
         }
         .padding(.top)

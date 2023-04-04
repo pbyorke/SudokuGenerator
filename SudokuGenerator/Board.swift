@@ -11,7 +11,7 @@ struct Board: View {
     
     @EnvironmentObject private var vm: ViewModel
     
-    private var rows: [Row]
+    var rows: [Row]
     
     /// initialze the Board by buildijng an array of Rows
     init() {
@@ -29,28 +29,6 @@ struct Board: View {
                 $0
             }
         }
-    }
-    
-    /// dump the whole Board
-    func dump() {
-        print("* * *  board")
-        for row in rows {
-            row.dump()
-        }
-    }
-    
-    /// tell a Row to dump itself
-    /// - Parameter row: Row number
-    func dump(_ row: Int) {
-        rows[row].dump()
-    }
-    
-    /// tell a row to tell a Cell to dump itselfØ
-    /// - Parameters:
-    ///   - row: Row number
-    ///   - col: Cell number
-    func dump(_ row: Int, _ col: Int) {
-        rows[row].dump(col)
     }
     
 }

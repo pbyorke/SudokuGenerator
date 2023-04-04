@@ -31,27 +31,13 @@ struct Row: View, Identifiable {
         HStack {
             ForEach(cells, id: \.id) {
                 $0
-                if $0.id % 9 == 2 || $0.id % 9 == 5 {
-                    Text(" ")
-                        .frame(width: 5, height: 5)
-                }
+//                if $0.id % 9 == 2 || $0.id % 9 == 5 {
+//                    Text(" ")
+//                        .frame(width: 5, height: 5)
+//                }
             }
         }
         .padding(.horizontal)
-    }
-    
-    /// dump the whole Row
-    func dump() {
-        print("* * *   Row \(row)")
-        for cell in cells {
-            cell.dump()
-        }
-    }
-    
-    /// tell a Cell to dump itself
-    /// - Parameter col: Cell numberr
-    func dump(_ col: Int) {
-        cells[col].dump()
     }
     
 }

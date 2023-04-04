@@ -13,7 +13,7 @@ struct Cell: View, Identifiable {
     
     let id: Int
     let pos: (row: Int, col: Int)
-    private var value: Int { vm.data[pos.row][pos.col] }
+    var value: Int { vm.data[pos.row][pos.col] }
 
     /// initialized the Cell, storing its row and column
     /// - Parameter pos: tuple containing (row, col)
@@ -35,11 +35,6 @@ struct Cell: View, Identifiable {
             .onTapGesture {
                 vm.tap(self)
             }
-    }
-    
-    /// dump the contents of this Cell
-    func dump() {
-        print("* * *    Cell pos (\(pos.row), \(pos.col)) data \(value))")
     }
     
 }
