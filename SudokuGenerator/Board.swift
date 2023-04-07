@@ -34,18 +34,18 @@ struct Board: View {
     }
     
     var body: some View {
-        VStack {
-            HStack {
+        VStack(spacing: 0) {
+            HStack(spacing: 0) {
                 blocks[0][0]
                 blocks[0][1]
                 blocks[0][2]
             }
-            HStack {
+            HStack(spacing: 0) {
                 blocks[1][0]
                 blocks[1][1]
                 blocks[1][2]
             }
-            HStack {
+            HStack(spacing: 0) {
                 blocks[2][0]
                 blocks[2][1]
                 blocks[2][2]

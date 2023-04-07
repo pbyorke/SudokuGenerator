@@ -11,20 +11,24 @@ struct Cell: View {
 
     @EnvironmentObject private var vm: ViewModel
 
-    let id, row, col: Int
+    let row, col: Int
     var value: Int { vm.data[row][col] }
+    var width: CGFloat { (UIScreen.main.bounds.width - 20) / 9 }
 
     init(row: Int, col: Int) {
         self.row = row
         self.col = col
-        self.id = row * 9 + col
     }
     
     var body: some View {
         Text(value == 0 ? " " : "\(value)")
-            .frame(width: 30, height: 30)
+            .frame(width: width, height: width)
             .font(.system(size: 24))
-            .background(vm.isSelected(self) ? Color.yellow : Color.white)
+            .background(vm.isSelected(self) ? Color.realYellow : Color.white)
+            .overlay(
+                RoundedRectangle(cornerRadius: 0)
+                    .stroke(lineWidth: 1)
+            )
             .onTapGesture {
                 vm.tap(self)
             }
