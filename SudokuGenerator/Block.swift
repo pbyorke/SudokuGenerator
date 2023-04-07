@@ -34,24 +34,27 @@ struct Block: View {
     }
     
     var body: some View {
-        VStack {
-            HStack {
+        VStack(spacing: 0) {
+            HStack(spacing: 0) {
                 cells[0][0]
                 cells[0][1]
                 cells[0][2]
             }
-            HStack {
+            HStack(spacing: 0) {
                 cells[1][0]
                 cells[1][1]
                 cells[1][2]
             }
-            HStack {
+            HStack(spacing: 0) {
                 cells[2][0]
                 cells[2][1]
                 cells[2][2]
             }
         }
-        .border(.black)
+        .overlay(
+            RoundedRectangle(cornerRadius: 0)
+                .stroke(lineWidth: 3)
+        )
     }
 
 }

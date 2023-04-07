@@ -20,18 +20,35 @@ struct ContentView: View {
     var body: some View {
         VStack {
             board
-                .border(.black)
-            Button {
-                vm.shuffle()
-            } label: {
-                Text("Shuffle")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .padding()
-                    .foregroundColor(.white)
-                    .background(Color.green)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 0)
+                        .stroke(lineWidth: 1)
+                )
+            HStack {
+                Button {
+                    vm.shuffle()
+                } label: {
+                    Text("Shuffle")
+                        .font(.callout)
+                        .fontWeight(.bold)
+                        .padding()
+                        .foregroundColor(.white)
+                        .background(Color.green)
+                }
+                .padding()
+                Button {
+                    vm.exclude10()
+                } label: {
+                    Text("Exclude 10")
+                        .font(.callout)
+                        .fontWeight(.bold)
+                        .padding()
+                        .foregroundColor(.white)
+                        .background(Color.green)
+                }
+                .padding()
+                Spacer()
             }
-            .padding()
             Spacer()
         }
         .padding()

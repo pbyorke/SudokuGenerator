@@ -5,6 +5,10 @@
 //  Created by Peter Yorke on 4/1/23.
 //
 //  https://stackoverflow.com/questions/6924216/how-to-generate-sudoku-boards-with-unique-solutions
+//  http://zhangroup.aporc.org/images/files/Paper_3485.pdf
+//  https://www.kevinhooke.com/2021/07/23/grading-the-difficulty-of-a-sudoku-puzzle/
+//  https://www.cs.mcgill.ca/~aassaf9/python/algorithm_x.html
+//  https://medium.com/@rjchatfield/sudoku-solver-in-swift-on-vacation-74e9166277ed
 //
 
 import SwiftUI
@@ -52,6 +56,18 @@ class ViewModel: ObservableObject {
         shuffleNumbers()
         shuffleRows()
         shuffleCols()
+    }
+    
+    func exclude10() {
+        var count = 0
+        while count < 11 {
+            let row = Int.random(in: 0..<9)
+            let col = Int.random(in: 0..<9)
+            if data[row][col] != 0 {
+                data[row][col] = 0
+                count += 1
+            }
+        }
     }
 
     private func shuffleNumbers() {

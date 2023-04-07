@@ -10,7 +10,7 @@ import Foundation
 extension Cell {
     
     func dump() {
-        print("* * *    Cell id \(id) row \(row) col \(col) value \(value)")
+        print("* * *    Cell row \(row) col \(col) value \(value)")
     }
     
 }
