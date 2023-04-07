@@ -51,6 +51,10 @@ struct Block: View {
                 cells[2][2]
             }
         }
+        .overlay(
+            RoundedRectangle(cornerRadius: 0)
+                .stroke(lineWidth: 3)
+        )
     }
 
 }

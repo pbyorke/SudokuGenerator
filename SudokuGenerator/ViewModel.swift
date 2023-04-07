@@ -59,7 +59,15 @@ class ViewModel: ObservableObject {
     }
     
     func exclude10() {
-        
+        var count = 0
+        while count < 11 {
+            let row = Int.random(in: 0..<9)
+            let col = Int.random(in: 0..<9)
+            if data[row][col] != 0 {
+                data[row][col] = 0
+                count += 1
+            }
+        }
     }
 
     private func shuffleNumbers() {
