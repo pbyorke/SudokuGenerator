@@ -11,10 +11,10 @@ struct Block: View {
 
     @EnvironmentObject private var vm: ViewModel
     
-    var block: [[Cell]]
+    var cells: [[Cell]]
     
     init(row: Int, col: Int) {
-        block = [
+        cells = [
             [
                 Cell(row: row + 0, col: col + 0),
                 Cell(row: row + 0, col: col + 1),
@@ -36,21 +36,22 @@ struct Block: View {
     var body: some View {
         VStack {
             HStack {
-                block[0][0]
-                block[0][1]
-                block[0][2]
+                cells[0][0]
+                cells[0][1]
+                cells[0][2]
             }
             HStack {
-                block[1][0]
-                block[1][1]
-                block[1][2]
+                cells[1][0]
+                cells[1][1]
+                cells[1][2]
             }
             HStack {
-                block[2][0]
-                block[2][1]
-                block[2][2]
+                cells[2][0]
+                cells[2][1]
+                cells[2][2]
             }
         }
+        .border(.black)
     }
 
 }

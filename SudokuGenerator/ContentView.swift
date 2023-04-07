@@ -15,12 +15,12 @@ struct ContentView: View {
     
     init() {
         board = Board()
-//        board.dump()
     }
     
     var body: some View {
         VStack {
             board
+                .border(.black)
             Button {
                 vm.shuffle()
             } label: {

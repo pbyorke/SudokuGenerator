@@ -12,7 +12,7 @@ extension Board {
     func dump() {
         for row in 0..<3 {
             for col in 0..<3 {
-                board[row][col].dump()
+                blocks[row][col].dump()
             }
         }
     }

@@ -24,11 +24,7 @@ struct Cell: View {
         Text(value == 0 ? " " : "\(value)")
             .frame(width: 30, height: 30)
             .font(.system(size: 24))
-            .overlay(
-                vm.isSelected(self)
-                ? RoundedRectangle(cornerRadius: 5).stroke(Color.red, lineWidth: 4)
-                : RoundedRectangle(cornerRadius: 5).stroke(Color.black, lineWidth: 1)
-            )
+            .background(vm.isSelected(self) ? Color.yellow : Color.white)
             .onTapGesture {
                 vm.tap(self)
             }

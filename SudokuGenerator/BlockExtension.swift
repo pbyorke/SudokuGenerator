@@ -13,7 +13,7 @@ extension Block {
         print("* * *   Block")
         for row in 0..<3 {
             for col in 0..<3 {
-                block[row][col].dump()
+                cells[row][col].dump()
             }
         }
     }
