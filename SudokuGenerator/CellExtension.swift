@@ -9,9 +9,8 @@ import Foundation
 
 extension Cell {
     
-    /// dump the contents of this Cell
     func dump() {
-        print("* * *    Cell pos (\(pos.row), \(pos.col)) data \(value))")
+        print("* * *    Cell id \(id) row \(row) col \(col) value \(value)")
     }
     
 }

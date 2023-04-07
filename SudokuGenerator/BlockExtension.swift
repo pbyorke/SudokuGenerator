@@ -1,18 +1,19 @@
 //
-//  BoardExtension.swift
+//  BlockExtension.swift
 //  SudokuGenerator
 //
-//  Created by Peter Yorke on 4/4/23.
+//  Created by Peter Yorke on 4/6/23.
 //
 
 import Foundation
 
-extension Board {
+extension Block {
     
     func dump() {
+        print("* * *   Block")
         for row in 0..<3 {
             for col in 0..<3 {
-                board[row][col].dump()
+                block[row][col].dump()
             }
         }
     }

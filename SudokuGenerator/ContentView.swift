@@ -11,27 +11,30 @@ struct ContentView: View {
     
     @EnvironmentObject private var vm: ViewModel
     
+    var board: Board
+    
+    init() {
+        board = Board()
+//        board.dump()
+    }
+    
     var body: some View {
-        
         VStack {
-            vm.board
+            board
             Button {
                 vm.shuffle()
             } label: {
-                HStack {
-                    Text("Shuffle")
-                        .font(.title)
-                        .padding()
-                        .foregroundColor(.white)
-                        .background(Color.green)
-                    Spacer()
-                }
-                .padding()
+                Text("Shuffle")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .padding()
+                    .foregroundColor(.white)
+                    .background(Color.green)
             }
-
+            .padding()
             Spacer()
         }
-        .padding(.top)
+        .padding()
     }
     
 }

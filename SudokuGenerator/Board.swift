@@ -10,23 +10,45 @@ import SwiftUI
 struct Board: View {
     
     @EnvironmentObject private var vm: ViewModel
+
+    var board: [[Block]]
     
-    var rows: [Row]
-    
-    /// initialze the Board by buildijng an array of Rows
     init() {
-        var array = [Row]()
-        for i in 0...8 {
-            array.append(Row(i))
-        }
-        self.rows = array
+        board = [
+            [
+                Block(row: 0, col: 0),
+                Block(row: 0, col: 3),
+                Block(row: 0, col: 6),
+            ],
+            [
+                Block(row: 3, col: 0),
+                Block(row: 3, col: 3),
+                Block(row: 3, col: 6),
+            ],
+            [
+                Block(row: 6, col: 0),
+                Block(row: 6, col: 3),
+                Block(row: 6, col: 6),
+            ],
+        ]
     }
     
-    /// required body. Go through all the Rows and put each one in a VStack
     var body: some View {
         VStack {
-            ForEach(rows, id: \.id) {
-                $0
+            HStack {
+                board[0][0]
+                board[0][1]
+                board[0][2]
+            }
+            HStack {
+                board[1][0]
+                board[1][1]
+                board[1][2]
+            }
+            HStack {
+                board[2][0]
+                board[2][1]
+                board[2][2]
             }
         }
     }

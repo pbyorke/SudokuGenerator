@@ -7,22 +7,19 @@
 
 import SwiftUI
 
-struct Cell: View, Identifiable {
-    
-    @EnvironmentObject private var vm: ViewModel
-    
-    let id: Int
-    let pos: (row: Int, col: Int)
-    var value: Int { vm.data[pos.row][pos.col] }
+struct Cell: View {
 
-    /// initialized the Cell, storing its row and column
-    /// - Parameter pos: tuple containing (row, col)
-    init(_ pos: (row: Int, col: Int)) {
-        self.pos = pos
-        self.id = pos.row * 9 + pos.col
+    @EnvironmentObject private var vm: ViewModel
+
+    let id, row, col: Int
+    var value: Int { vm.data[row][col] }
+
+    init(row: Int, col: Int) {
+        self.row = row
+        self.col = col
+        self.id = row * 9 + col
     }
     
-    /// required body. Display a number if >0, else black
     var body: some View {
         Text(value == 0 ? " " : "\(value)")
             .frame(width: 30, height: 30)
@@ -43,7 +40,7 @@ struct Cell: View, Identifiable {
 
 struct Cell_Previews: PreviewProvider {
     static var previews: some View {
-        Cell((0, 0))
+        Cell(row: 0, col: 0)
             .environmentObject(ViewModel.shared)
     }
 }

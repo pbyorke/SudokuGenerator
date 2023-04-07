@@ -13,7 +13,8 @@ class ViewModel: ObservableObject {
     
     static var shared = ViewModel()
     
-    @Published var selected = (row: -1, col: -1)
+    @Published var selectedRow = -1
+    @Published var selectedCol = -1
     
     @Published var data = [
         [1,2,3, 4,5,6, 7,8,9],
@@ -29,38 +30,30 @@ class ViewModel: ObservableObject {
         [9,7,8, 3,1,2, 6,4,5],
     ]
     
-    var board: Board
-    
-    private init() {
-        board = Board()
-    }
-    
     func tap(_ cell: Cell) {
         if isSelected(cell) {
-            selected = (-1, -1)
+            selectedRow = -1
+            selectedCol = -1
         } else {
-            selected = (cell.pos)
+            selectedRow = cell.row
+            selectedCol = cell.col
         }
     }
-    
+
     func isSelected(_ cell: Cell) -> Bool {
-        return cell.pos == selected
+        cell.row == selectedRow && cell.col == selectedCol
     }
-    
+
     func isSelection() -> Bool {
-        return selected == (-1, -1)
+        selectedRow == -1 && selectedCol == -1
     }
-    
-    func dump() {
-        board.dump()
-    }
-    
+
     func shuffle() {
         shuffleNumbers()
         shuffleRows()
         shuffleCols()
     }
-    
+
     private func shuffleNumbers() {
         for i in 1...9 {
             let ranNum = Int.random(in: 1...9)

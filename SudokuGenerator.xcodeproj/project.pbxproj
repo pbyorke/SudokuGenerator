@@ -8,31 +8,31 @@
 
 /* Begin PBXBuildFile section */
 		C10A0CFE29D88A2500CB0952 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10A0CFD29D88A2500CB0952 /* Cell.swift */; };
-		C10A0D0329D88BDE00CB0952 /* Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10A0D0229D88BDE00CB0952 /* Row.swift */; };
 		C10A0D0629D88DB300CB0952 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10A0D0529D88DB300CB0952 /* ViewModel.swift */; };
 		C10A0D0829D88E0600CB0952 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10A0D0729D88E0600CB0952 /* Board.swift */; };
+		C16EB9CE29DF80A500AFFED8 /* BlockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16EB9CD29DF80A500AFFED8 /* BlockExtension.swift */; };
 		C1A0926929D66706007750FA /* SudokuGeneratorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A0926829D66706007750FA /* SudokuGeneratorApp.swift */; };
 		C1A0926B29D66706007750FA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A0926A29D66706007750FA /* ContentView.swift */; };
 		C1A0926D29D66707007750FA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1A0926C29D66707007750FA /* Assets.xcassets */; };
 		C1A0927029D66707007750FA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1A0926F29D66707007750FA /* Preview Assets.xcassets */; };
 		C1CD3D0429DCE56E00C1FF96 /* BoardExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CD3D0329DCE56E00C1FF96 /* BoardExtension.swift */; };
-		C1CD3D0629DCE5C500C1FF96 /* RowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CD3D0529DCE5C500C1FF96 /* RowExtension.swift */; };
 		C1CD3D0829DCE5F400C1FF96 /* CellExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CD3D0729DCE5F400C1FF96 /* CellExtension.swift */; };
+		C1F008AC29DE41C00084D368 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F008AB29DE41C00084D368 /* Block.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		C10A0CFD29D88A2500CB0952 /* Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
-		C10A0D0229D88BDE00CB0952 /* Row.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Row.swift; sourceTree = "<group>"; };
 		C10A0D0529D88DB300CB0952 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		C10A0D0729D88E0600CB0952 /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
+		C16EB9CD29DF80A500AFFED8 /* BlockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockExtension.swift; sourceTree = "<group>"; };
 		C1A0926529D66706007750FA /* SudokuGenerator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SudokuGenerator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1A0926829D66706007750FA /* SudokuGeneratorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SudokuGeneratorApp.swift; sourceTree = "<group>"; };
 		C1A0926A29D66706007750FA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		C1A0926C29D66707007750FA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C1A0926F29D66707007750FA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C1CD3D0329DCE56E00C1FF96 /* BoardExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardExtension.swift; sourceTree = "<group>"; };
-		C1CD3D0529DCE5C500C1FF96 /* RowExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowExtension.swift; sourceTree = "<group>"; };
 		C1CD3D0729DCE5F400C1FF96 /* CellExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellExtension.swift; sourceTree = "<group>"; };
+		C1F008AB29DE41C00084D368 /* Block.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,19 +56,12 @@
 			name = Infrastructure;
 			sourceTree = "<group>";
 		};
-		C10A0D0029D88B8F00CB0952 /* Entities */ = {
-			isa = PBXGroup;
-			children = (
-				C10A0D0729D88E0600CB0952 /* Board.swift */,
-				C10A0CFD29D88A2500CB0952 /* Cell.swift */,
-				C10A0D0229D88BDE00CB0952 /* Row.swift */,
-			);
-			name = Entities;
-			sourceTree = "<group>";
-		};
 		C10A0D0129D88B9A00CB0952 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C1F008AB29DE41C00084D368 /* Block.swift */,
+				C10A0D0729D88E0600CB0952 /* Board.swift */,
+				C10A0CFD29D88A2500CB0952 /* Cell.swift */,
 				C1A0926A29D66706007750FA /* ContentView.swift */,
 			);
 			name = Views;
@@ -101,7 +94,6 @@
 		C1A0926729D66706007750FA /* SudokuGenerator */ = {
 			isa = PBXGroup;
 			children = (
-				C10A0D0029D88B8F00CB0952 /* Entities */,
 				C1CD3D0229DCE53D00C1FF96 /* Extensions */,
 				C10A0CFF29D88B7000CB0952 /* Infrastructure */,
 				C10A0D0429D88D9B00CB0952 /* ViewModels */,
@@ -121,9 +113,9 @@
 		C1CD3D0229DCE53D00C1FF96 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				C16EB9CD29DF80A500AFFED8 /* BlockExtension.swift */,
 				C1CD3D0329DCE56E00C1FF96 /* BoardExtension.swift */,
 				C1CD3D0729DCE5F400C1FF96 /* CellExtension.swift */,
-				C1CD3D0529DCE5C500C1FF96 /* RowExtension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -199,12 +191,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				C10A0D0829D88E0600CB0952 /* Board.swift in Sources */,
+				C16EB9CE29DF80A500AFFED8 /* BlockExtension.swift in Sources */,
 				C10A0D0629D88DB300CB0952 /* ViewModel.swift in Sources */,
 				C1CD3D0829DCE5F400C1FF96 /* CellExtension.swift in Sources */,
-				C1CD3D0629DCE5C500C1FF96 /* RowExtension.swift in Sources */,
 				C1CD3D0429DCE56E00C1FF96 /* BoardExtension.swift in Sources */,
-				C10A0D0329D88BDE00CB0952 /* Row.swift in Sources */,
 				C1A0926B29D66706007750FA /* ContentView.swift in Sources */,
+				C1F008AC29DE41C00084D368 /* Block.swift in Sources */,
 				C1A0926929D66706007750FA /* SudokuGeneratorApp.swift in Sources */,
 				C10A0CFE29D88A2500CB0952 /* Cell.swift in Sources */,
 			);
