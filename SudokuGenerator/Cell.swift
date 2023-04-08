@@ -12,7 +12,7 @@ struct Cell: View {
     @EnvironmentObject private var vm: ViewModel
 
     let row, col: Int
-    var value: Int { vm.data[row][col] }
+    var value: Int { vm.data[row][col].value }
     var width: CGFloat { (UIScreen.main.bounds.width - 20) / 9 }
 
     init(row: Int, col: Int) {
@@ -24,7 +24,13 @@ struct Cell: View {
         Text(value == 0 ? " " : "\(value)")
             .frame(width: width, height: width)
             .font(.system(size: 24))
-            .background(vm.isSelected(self) ? Color.realYellow : Color.white)
+            .background(
+                vm.isLockedAndRunning(self) ?
+                Color.realGrey :
+                    vm.isThisCellSelected(self) ?
+                Color.realYellow :
+                    Color.white
+            )
             .overlay(
                 RoundedRectangle(cornerRadius: 0)
                     .stroke(lineWidth: 1)

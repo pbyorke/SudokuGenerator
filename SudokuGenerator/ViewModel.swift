@@ -13,29 +13,60 @@
 
 import SwiftUI
 
+enum CellType {
+    case open, locked, error, good
+}
+
+struct CellData {
+    var value: Int
+    var type: CellType
+    
+    init(_ value: Int) {
+        self.value = value
+        self.type = .open
+    }
+}
+
 class ViewModel: ObservableObject {
     
     static var shared = ViewModel()
     
     @Published var selectedRow = -1
     @Published var selectedCol = -1
+    @Published var isAllCorrect = false
+    @Published var isAllWrong = false
     
     @Published var data = [
-        [1,2,3, 4,5,6, 7,8,9],
-        [4,5,6, 7,8,9, 1,2,3],
-        [7,8,9, 1,2,3, 4,5,6],
+        [CellData(1),CellData(2),CellData(3), CellData(4),CellData(5),CellData(6), CellData(7),CellData(8),CellData(9)],
+        [CellData(4),CellData(5),CellData(6), CellData(7),CellData(8),CellData(9), CellData(1),CellData(2),CellData(3)],
+        [CellData(7),CellData(8),CellData(9), CellData(1),CellData(2),CellData(3), CellData(4),CellData(5),CellData(6)],
         
-        [2,3,1, 5,6,4, 8,9,7],
-        [5,6,4, 8,9,7, 2,3,1],
-        [8,9,7, 2,3,1, 5,6,4],
+        [CellData(2),CellData(3),CellData(1), CellData(5),CellData(6),CellData(4), CellData(8),CellData(9),CellData(7)],
+        [CellData(5),CellData(6),CellData(4), CellData(8),CellData(9),CellData(7), CellData(2),CellData(3),CellData(1)],
+        [CellData(8),CellData(9),CellData(7), CellData(2),CellData(3),CellData(1), CellData(5),CellData(6),CellData(4)],
         
-        [3,1,2, 6,4,5, 9,7,8],
-        [6,4,5, 9,7,8, 3,1,2],
-        [9,7,8, 3,1,2, 6,4,5],
+        [CellData(3),CellData(1),CellData(2), CellData(6),CellData(4),CellData(5), CellData(9),CellData(7),CellData(8)],
+        [CellData(6),CellData(4),CellData(5), CellData(9),CellData(7),CellData(8), CellData(3),CellData(1),CellData(2)],
+        [CellData(9),CellData(7),CellData(8), CellData(3),CellData(1),CellData(2), CellData(6),CellData(4),CellData(5)],
     ]
     
+    var originalData = [
+        [CellData(1),CellData(2),CellData(3), CellData(4),CellData(5),CellData(6), CellData(7),CellData(8),CellData(9)],
+        [CellData(4),CellData(5),CellData(6), CellData(7),CellData(8),CellData(9), CellData(1),CellData(2),CellData(3)],
+        [CellData(7),CellData(8),CellData(9), CellData(1),CellData(2),CellData(3), CellData(4),CellData(5),CellData(6)],
+        
+        [CellData(2),CellData(3),CellData(1), CellData(5),CellData(6),CellData(4), CellData(8),CellData(9),CellData(7)],
+        [CellData(5),CellData(6),CellData(4), CellData(8),CellData(9),CellData(7), CellData(2),CellData(3),CellData(1)],
+        [CellData(8),CellData(9),CellData(7), CellData(2),CellData(3),CellData(1), CellData(5),CellData(6),CellData(4)],
+        
+        [CellData(3),CellData(1),CellData(2), CellData(6),CellData(4),CellData(5), CellData(9),CellData(7),CellData(8)],
+        [CellData(6),CellData(4),CellData(5), CellData(9),CellData(7),CellData(8), CellData(3),CellData(1),CellData(2)],
+        [CellData(9),CellData(7),CellData(8), CellData(3),CellData(1),CellData(2), CellData(6),CellData(4),CellData(5)],
+    ]
+    private var running = false
+    
     func tap(_ cell: Cell) {
-        if isSelected(cell) {
+        if isThisCellSelected(cell) {
             selectedRow = -1
             selectedCol = -1
         } else {
@@ -44,18 +75,30 @@ class ViewModel: ObservableObject {
         }
     }
 
-    func isSelected(_ cell: Cell) -> Bool {
+    func isThisCellSelected(_ cell: Cell) -> Bool {
         cell.row == selectedRow && cell.col == selectedCol
     }
-
-    func isSelection() -> Bool {
-        selectedRow == -1 && selectedCol == -1
+    
+    func isLockedAndRunning(_ cell: Cell) -> Bool {
+        data[cell.row][cell.col].type == .locked
     }
 
+    func isAnyCellSelected() -> Bool {
+        return selectedRow != -1
+    }
+    
+    var isRunning: Bool { running }
+
     func shuffle() {
-        shuffleNumbers()
-        shuffleRows()
-        shuffleCols()
+        Shuffle().run()
+    }
+    
+    func exclude1() {
+        let row = Int.random(in: 0..<9)
+        let col = Int.random(in: 0..<9)
+        if data[row][col].value != 0 {
+            data[row][col].value = 0
+        }
     }
     
     func exclude10() {
@@ -63,86 +106,41 @@ class ViewModel: ObservableObject {
         while count < 11 {
             let row = Int.random(in: 0..<9)
             let col = Int.random(in: 0..<9)
-            if data[row][col] != 0 {
-                data[row][col] = 0
+            if data[row][col].value != 0 {
+                data[row][col].value = 0
                 count += 1
             }
         }
     }
-
-    private func shuffleNumbers() {
-        for i in 1...9 {
-            let ranNum = Int.random(in: 1...9)
-            swapNumbers(i, ranNum)
-        }
-    }
-
-    private func swapNumbers(_ n1: Int, _ n2: Int) {
-        for y in 0..<9 {
-            for x in 0..<9 {
-                if data[x][y] == n1 {
-                    data[x][y] = n2
-                } else if data[x][y] == n2 {
-                    data[x][y] = n1
-                }
+    
+    func reset( ){
+        data = originalData
+        for row in 0..<9 {
+            for col in 0..<9 {
+                data[row][col].type = .open
             }
         }
     }
-
-    private func shuffleRows() {
-        for i in 0..<9 {
-            let ranNum = Int.random(in: 0..<3)
-            let blockNumber = i / 3
-            swapRows(i, blockNumber * 3 + ranNum)
+    
+    func lock() {
+        for row in 0..<9 {
+            for col in 0..<9 {
+                if data[row][col].value != 0 {
+                    data[row][col].type = .locked
+                }
+            }
+        }
+        running = true
+    }
+    
+    func insert(_ value: Int) {
+        if isAnyCellSelected() {
+                if data[selectedRow][selectedCol].value == 0 {
+                    data[selectedRow][selectedCol].value = value
+            } else {
+                data[selectedRow][selectedCol].value = 0
+            }
         }
     }
-
-    private func swapRows(_ r1: Int, _ r2: Int) {
-        let row = data[r1]
-        data[r1] = data[r2]
-        data[r2] = row
-    }
-
-    private func shuffleCols() {
-        for i in 0..<9 {
-            let ranNum = Int.random(in: 0..<3)
-            let blockNumber = i / 3
-            swapCols(i, blockNumber * 3 + ranNum)
-        }
-    }
-
-    private func swapCols(_ c1: Int, _ c2: Int) {
-        for i in 0..<9 {
-            let colVal = data[i][c1]
-            data[i][c1] = data[i][c2]
-            data[i][c2] = colVal
-        }
-    }
-
-    private func ahuffle3x3Rows() {
-        for i in 0..<3 {
-            let ranNum = Int.random(in: 0..<3)
-            swap3x3Rows(i, ranNum)
-        }
-    }
-
-    private func swap3x3Rows(_ r1: Int, _ r2: Int) {
-        for i in 0..<3 {
-            swapRows(r1 * 3 + i, r2 * 3 + i)
-        }
-    }
-
-    private func shuffle3x3Cols() {
-        for i in 0..<3 {
-            let ranNum = Int.random(in: 0..<3)
-            swap3x3Cols(i, ranNum)
-        }
-    }
-
-    private func swap3x3Cols(_ c1: Int, _ c2: Int) {
-        for i in 0..<3 {
-            swapCols(c1 * 3 + i, c2 * 3 + i)
-        }
-    }
-        
+    
 }
