@@ -26,60 +26,68 @@ struct ContentView: View {
     var body: some View {
         VStack {
             board
+                .padding(.bottom)
             if vm.isRunning {
                 source
+                    .padding(.bottom)
+            }
+            
+            
+            VStack {
+                HStack {
+                    Button {
+                        vm.shuffle()
+                    } label: {
+                        Text("shuffle")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .padding()
+                            .foregroundColor(.white)
+                            .background(disableShuffle ? Color.realGrey : Color.green)
+                    }
+                    .disabled(disableShuffle)
+                    Button {
+                        vm.reset()
+                        disableLock = false
+                        disableExclude = false
+                        disableShuffle = false
+                    } label: {
+                        Text("reset")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .padding()
+                            .foregroundColor(.white)
+                            .background(Color.green)
+                    }
+                }
+                .padding(.bottom)
+                HStack {
+                    Button {
+                        vm.exclude10()
+                    } label: {
+                        Text("exclude 10")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .padding()
+                            .foregroundColor(.white)
+                            .background(disableExclude ? Color.realGrey : Color.green)
+                    }
+                    .disabled(disableExclude)
+                    Button {
+                        vm.exclude1()
+                    } label: {
+                        Text("exclude 1")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .padding()
+                            .foregroundColor(.white)
+                            .background(disableExclude ? Color.realGrey : Color.green)
+                    }
+                    .disabled(disableExclude)
+                }
+                .padding(.bottom)
             }
             HStack {
-                Button {
-                    vm.shuffle()
-                } label: {
-                    Text("~")
-                        .font(.caption)
-                        .fontWeight(.bold)
-                        .padding()
-                        .foregroundColor(.white)
-                        .background(disableShuffle ? Color.realGrey : Color.green)
-                }
-                .disabled(disableShuffle)
-                .padding()
-                Button {
-                    vm.exclude10()
-                } label: {
-                    Text("X 10")
-                        .font(.caption)
-                        .fontWeight(.bold)
-                        .padding()
-                        .foregroundColor(.white)
-                        .background(disableExclude ? Color.realGrey : Color.green)
-                }
-                .disabled(disableExclude)
-                .padding()
-                Button {
-                    vm.exclude1()
-                } label: {
-                    Text("X 1")
-                        .font(.caption)
-                        .fontWeight(.bold)
-                        .padding()
-                        .foregroundColor(.white)
-                        .background(disableExclude ? Color.realGrey : Color.green)
-                }
-                .disabled(disableExclude)
-                .padding()
-                Button {
-                    vm.reset()
-                    disableLock = false
-                    disableExclude = false
-                    disableShuffle = false
-                } label: {
-                    Text("R")
-                        .font(.caption)
-                        .fontWeight(.bold)
-                        .padding()
-                        .foregroundColor(.white)
-                        .background(Color.green)
-                }
-                .padding()
             }
             Button {
                 vm.lock()
@@ -87,7 +95,7 @@ struct ContentView: View {
                 disableExclude = true
                 disableShuffle = true
             } label: {
-                Text("Lock & Run")
+                Text("lock & run")
                     .font(.caption)
                     .fontWeight(.bold)
                     .padding()

@@ -25,18 +25,14 @@ struct Cell: View {
             .frame(width: width, height: width)
             .font(.system(size: 24))
             .background(
-                vm.isLockedAndRunning(self) ?
-                Color.realGrey :
-                    vm.isThisCellSelected(self) ?
-                Color.realYellow :
-                    Color.white
+                vm.chooseMyColor(self)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 0)
                     .stroke(lineWidth: 1)
             )
             .onTapGesture {
-                vm.tap(self)
+                vm.tapCell(self)
             }
     }
     

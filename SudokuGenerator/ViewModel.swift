@@ -14,7 +14,9 @@
 import SwiftUI
 
 enum CellType {
-    case open, locked, error, good
+    case open
+    case locked
+    case error
 }
 
 struct CellData {
@@ -63,30 +65,39 @@ class ViewModel: ObservableObject {
         [CellData(6),CellData(4),CellData(5), CellData(9),CellData(7),CellData(8), CellData(3),CellData(1),CellData(2)],
         [CellData(9),CellData(7),CellData(8), CellData(3),CellData(1),CellData(2), CellData(6),CellData(4),CellData(5)],
     ]
+    
     private var running = false
     
-    func tap(_ cell: Cell) {
-        if isThisCellSelected(cell) {
-            selectedRow = -1
-            selectedCol = -1
-        } else {
-            selectedRow = cell.row
-            selectedCol = cell.col
+    func tapSource(_ value: Int) {
+        if !isAllCorrect {
+            if selectedRow >= 0 {
+                if data[selectedRow][selectedCol].value == value {
+                    data[selectedRow][selectedCol].value = 0
+                } else {
+                    data[selectedRow][selectedCol].value = value
+                }
+            }
+            if isCompleted() {
+                isAllCorrect = true
+            }
+        }
+    }
+    
+    func tapCell(_ cell: Cell) {
+        if !isAllCorrect {
+                if cell.row == selectedRow && cell.col == selectedCol {
+                selectedRow = -1
+                selectedCol = -1
+            } else {
+                let cellData = data[cell.row][cell.col]
+                if cellData.type == .open {
+                    selectedRow = cell.row
+                    selectedCol = cell.col
+                }
+            }
         }
     }
 
-    func isThisCellSelected(_ cell: Cell) -> Bool {
-        cell.row == selectedRow && cell.col == selectedCol
-    }
-    
-    func isLockedAndRunning(_ cell: Cell) -> Bool {
-        data[cell.row][cell.col].type == .locked
-    }
-
-    func isAnyCellSelected() -> Bool {
-        return selectedRow != -1
-    }
-    
     var isRunning: Bool { running }
 
     func shuffle() {
@@ -120,6 +131,10 @@ class ViewModel: ObservableObject {
                 data[row][col].type = .open
             }
         }
+        selectedRow = -1
+        selectedCol = -1
+        isAllCorrect = false
+        running = false
     }
     
     func lock() {
@@ -133,14 +148,34 @@ class ViewModel: ObservableObject {
         running = true
     }
     
-    func insert(_ value: Int) {
-        if isAnyCellSelected() {
-                if data[selectedRow][selectedCol].value == 0 {
-                    data[selectedRow][selectedCol].value = value
-            } else {
-                data[selectedRow][selectedCol].value = 0
+    private func isCompleted() -> Bool {
+        for row in 0..<9 {
+            for col in 0..<9 {
+                if data[row][col].value == 0 {
+                    return false
+                }
             }
         }
+        isAllCorrect = true
+        return true
     }
     
+    func chooseMyColor(_ cell: Cell) ->Color {
+        let cellData = data[cell.row][cell.col]
+        if isAllCorrect {
+            if data[cell.row][cell.col].type == .locked {
+                return .lockGreen
+            } else {
+                return .realGreen
+            }
+        }
+        if cell.row == selectedRow && cell.col == selectedCol {
+            return .realYellow
+        }
+        switch cellData.type {
+        case .open:     return .white
+        case .locked:   return .realGrey
+        case .error:    return .red
+        }
+    }
 }

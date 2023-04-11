@@ -13,7 +13,7 @@ struct SourceCell: View {
 
     let value: Int
     var width: CGFloat { (UIScreen.main.bounds.width - 20) / 9 }
-
+    
     init(value: Int) {
         self.value = value
     }
@@ -27,7 +27,7 @@ struct SourceCell: View {
                     .stroke(lineWidth: 1)
             )
             .onTapGesture {
-                vm.insert(value)
+                vm.tapSource(value)
             }
     }
     
