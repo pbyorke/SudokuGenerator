@@ -13,5 +13,6 @@ extension Color {
     static let realGrey   = Color(red: 200/255, green: 200/255, blue: 200/255)
     static let realGreen  = Color(red:   0/255, green: 240/255, blue:   0/255)
     static let lockGreen  = Color(red:  28/255, green: 200/255, blue:  28/255)
+    static let realRed    = Color(red: 240/255, green:   0/255, blue:   0/255)
 
 }

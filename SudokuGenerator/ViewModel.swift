@@ -13,22 +13,6 @@
 
 import SwiftUI
 
-enum CellType {
-    case open
-    case locked
-    case error
-}
-
-struct CellData {
-    var value: Int
-    var type: CellType
-    
-    init(_ value: Int) {
-        self.value = value
-        self.type = .open
-    }
-}
-
 class ViewModel: ObservableObject {
     
     static var shared = ViewModel()
@@ -36,38 +20,78 @@ class ViewModel: ObservableObject {
     @Published var selectedRow = -1
     @Published var selectedCol = -1
     @Published var isAllCorrect = false
-    @Published var isAllWrong = false
     
     @Published var data = [
-        [CellData(1),CellData(2),CellData(3), CellData(4),CellData(5),CellData(6), CellData(7),CellData(8),CellData(9)],
-        [CellData(4),CellData(5),CellData(6), CellData(7),CellData(8),CellData(9), CellData(1),CellData(2),CellData(3)],
-        [CellData(7),CellData(8),CellData(9), CellData(1),CellData(2),CellData(3), CellData(4),CellData(5),CellData(6)],
+        [CellData(0,0,1),CellData(0,1,2),CellData(0,2,3),
+         CellData(0,3,4),CellData(0,4,5),CellData(0,5,6),
+         CellData(0,6,7),CellData(0,7,8),CellData(0,8,9)],
+        [CellData(1,0,4),CellData(1,1,5),CellData(1,2,6),
+         CellData(1,3,7),CellData(1,4,8),CellData(1,5,9),
+         CellData(1,6,1),CellData(1,7,2),CellData(1,8,3)],
+        [CellData(2,0,7),CellData(2,1,8),CellData(2,2,9),
+         CellData(2,3,1),CellData(2,4,2),CellData(2,5,3),
+         CellData(2,6,4),CellData(2,7,5),CellData(2,8,6)],
         
-        [CellData(2),CellData(3),CellData(1), CellData(5),CellData(6),CellData(4), CellData(8),CellData(9),CellData(7)],
-        [CellData(5),CellData(6),CellData(4), CellData(8),CellData(9),CellData(7), CellData(2),CellData(3),CellData(1)],
-        [CellData(8),CellData(9),CellData(7), CellData(2),CellData(3),CellData(1), CellData(5),CellData(6),CellData(4)],
         
-        [CellData(3),CellData(1),CellData(2), CellData(6),CellData(4),CellData(5), CellData(9),CellData(7),CellData(8)],
-        [CellData(6),CellData(4),CellData(5), CellData(9),CellData(7),CellData(8), CellData(3),CellData(1),CellData(2)],
-        [CellData(9),CellData(7),CellData(8), CellData(3),CellData(1),CellData(2), CellData(6),CellData(4),CellData(5)],
+        [CellData(3,0,2),CellData(3,1,3),CellData(3,2,1),
+         CellData(3,3,5),CellData(3,4,6),CellData(3,5,4),
+         CellData(3,6,8),CellData(3,7,9),CellData(3,8,7)],
+        [CellData(4,0,5),CellData(4,1,6),CellData(4,2,4),
+         CellData(4,3,8),CellData(4,4,9),CellData(4,5,7),
+         CellData(4,6,2),CellData(4,7,3),CellData(4,8,1)],
+        [CellData(5,0,8),CellData(5,1,9),CellData(5,2,7),
+         CellData(5,3,2),CellData(5,4,3),CellData(6,5,1),
+         CellData(5,6,5),CellData(5,7,6),CellData(5,8,4)],
+                
+        
+        [CellData(6,0,3),CellData(6,1,1),CellData(6,2,2),
+         CellData(6,3,6),CellData(6,4,4),CellData(7,5,5),
+         CellData(6,6,9),CellData(6,7,7),CellData(6,8,8)],
+        [CellData(7,0,6),CellData(7,1,4),CellData(7,2,5),
+         CellData(7,3,9),CellData(7,4,7),CellData(8,5,8),
+         CellData(7,6,3),CellData(7,7,1),CellData(7,8,2)],
+        [CellData(8,0,9),CellData(8,1,7),CellData(8,2,8),
+         CellData(8,3,3),CellData(8,4,1),CellData(9,5,2),
+         CellData(8,6,6),CellData(8,7,4),CellData(8,8,5)],
     ]
     
     var originalData = [
-        [CellData(1),CellData(2),CellData(3), CellData(4),CellData(5),CellData(6), CellData(7),CellData(8),CellData(9)],
-        [CellData(4),CellData(5),CellData(6), CellData(7),CellData(8),CellData(9), CellData(1),CellData(2),CellData(3)],
-        [CellData(7),CellData(8),CellData(9), CellData(1),CellData(2),CellData(3), CellData(4),CellData(5),CellData(6)],
+        [CellData(0,0,1),CellData(0,1,2),CellData(0,2,3),
+         CellData(0,3,4),CellData(0,4,5),CellData(0,5,6),
+         CellData(0,6,7),CellData(0,7,8),CellData(0,8,9)],
+        [CellData(1,0,4),CellData(1,1,5),CellData(1,2,6),
+         CellData(1,3,7),CellData(1,4,8),CellData(1,5,9),
+         CellData(1,6,1),CellData(1,7,2),CellData(1,8,3)],
+        [CellData(2,0,7),CellData(2,1,8),CellData(2,2,9),
+         CellData(2,3,1),CellData(2,4,2),CellData(2,5,3),
+         CellData(2,6,4),CellData(2,7,5),CellData(2,8,6)],
         
-        [CellData(2),CellData(3),CellData(1), CellData(5),CellData(6),CellData(4), CellData(8),CellData(9),CellData(7)],
-        [CellData(5),CellData(6),CellData(4), CellData(8),CellData(9),CellData(7), CellData(2),CellData(3),CellData(1)],
-        [CellData(8),CellData(9),CellData(7), CellData(2),CellData(3),CellData(1), CellData(5),CellData(6),CellData(4)],
         
-        [CellData(3),CellData(1),CellData(2), CellData(6),CellData(4),CellData(5), CellData(9),CellData(7),CellData(8)],
-        [CellData(6),CellData(4),CellData(5), CellData(9),CellData(7),CellData(8), CellData(3),CellData(1),CellData(2)],
-        [CellData(9),CellData(7),CellData(8), CellData(3),CellData(1),CellData(2), CellData(6),CellData(4),CellData(5)],
+        [CellData(3,0,2),CellData(3,1,3),CellData(3,2,1),
+         CellData(3,3,5),CellData(3,4,6),CellData(3,5,4),
+         CellData(3,6,8),CellData(3,7,9),CellData(3,8,7)],
+        [CellData(4,0,5),CellData(4,1,6),CellData(4,2,4),
+         CellData(4,3,8),CellData(4,4,9),CellData(4,5,7),
+         CellData(4,6,2),CellData(4,7,3),CellData(4,8,1)],
+        [CellData(5,0,8),CellData(5,1,9),CellData(5,2,7),
+         CellData(5,3,2),CellData(5,4,3),CellData(6,5,1),
+         CellData(5,6,5),CellData(5,7,6),CellData(5,8,4)],
+                
+        
+        [CellData(6,0,3),CellData(6,1,1),CellData(6,2,2),
+         CellData(6,3,6),CellData(6,4,4),CellData(7,5,5),
+         CellData(6,6,9),CellData(6,7,7),CellData(6,8,8)],
+        [CellData(7,0,6),CellData(7,1,4),CellData(7,2,5),
+         CellData(7,3,9),CellData(7,4,7),CellData(8,5,8),
+         CellData(7,6,3),CellData(7,7,1),CellData(7,8,2)],
+        [CellData(8,0,9),CellData(8,1,7),CellData(8,2,8),
+         CellData(8,3,3),CellData(8,4,1),CellData(9,5,2),
+         CellData(8,6,6),CellData(8,7,4),CellData(8,8,5)],
     ]
     
     private var running = false
-    
+    var isRunning: Bool { running }
+
     func tapSource(_ value: Int) {
         if !isAllCorrect {
             if selectedRow >= 0 {
@@ -77,8 +101,10 @@ class ViewModel: ObservableObject {
                     data[selectedRow][selectedCol].value = value
                 }
             }
-            if isCompleted() {
-                isAllCorrect = true
+            if isEverythingFilled() {
+                if andThereAreNoErrors() {
+                    isAllCorrect = true
+                }
             }
         }
     }
@@ -90,15 +116,13 @@ class ViewModel: ObservableObject {
                 selectedCol = -1
             } else {
                 let cellData = data[cell.row][cell.col]
-                if cellData.type == .open {
+                if cellData.type == .open  || cellData.type == .error {
                     selectedRow = cell.row
                     selectedCol = cell.col
                 }
             }
         }
     }
-
-    var isRunning: Bool { running }
 
     func shuffle() {
         Shuffle().run()
@@ -147,20 +171,93 @@ class ViewModel: ObservableObject {
         }
         running = true
     }
-    
-    private func isCompleted() -> Bool {
-        for row in 0..<9 {
-            for col in 0..<9 {
+        
+    private func isEverythingFilled() -> Bool {
+        for row in 0...8 {
+            for col in 0...8 {
                 if data[row][col].value == 0 {
                     return false
                 }
             }
         }
-        isAllCorrect = true
         return true
     }
+
+    private func andThereAreNoErrors() -> Bool {
+        var noErrorsFound = true
+        if columnsHaveErrors() {
+            noErrorsFound = false
+        }
+        if rowsHaveErrors() {
+            noErrorsFound = false
+        }
+        if blocksHaveErrors() {
+            noErrorsFound = false
+        }
+        return noErrorsFound
+    }
     
-    func chooseMyColor(_ cell: Cell) ->Color {
+    private func columnsHaveErrors() -> Bool {
+        var errorsFound = false
+        for row in 0...8 {
+            var array = [CellData]()
+            for col in 0...8 {
+                array.append(data[row][col])
+            }
+            if analyzeArray(array) {
+                errorsFound = true
+            }
+        }
+        return errorsFound
+    }
+    
+    private func rowsHaveErrors() -> Bool {
+        var errorsFound = false
+        for col in 0...8 {
+            var array = [CellData]()
+            for row in 0...8 {
+                array.append(data[row][col])
+            }
+            if analyzeArray(array) {
+                errorsFound = true
+            }
+        }
+        return errorsFound
+    }
+    
+    private func blocksHaveErrors() -> Bool {
+        var array = [CellData]()
+        var errorsFound = false
+        for blockRow in 0...2 {
+            for blockCol in 0...2 {
+                array = [CellData]()
+                for row in blockRow * 3...blockRow * 3 + 2 {
+                    for col in blockCol * 3...blockCol * 3 + 2 {
+                        array.append(data[row][col])
+                    }
+                }
+                if analyzeArray(array) {
+                    errorsFound = true
+                }
+            }
+        }
+        return errorsFound
+    }
+
+    private func analyzeArray(_ array: [CellData]) -> Bool {
+        var thereAreErrors = false
+        for base in array {
+            for search in array {
+                if search.equals(base) {
+                    data[search.row][search.col].type = .error
+                    thereAreErrors = true
+                }
+            }
+        }
+        return thereAreErrors
+    }
+
+    func chooseMyColor(_ cell: Cell) -> Color {
         let cellData = data[cell.row][cell.col]
         if isAllCorrect {
             if data[cell.row][cell.col].type == .locked {
@@ -170,7 +267,11 @@ class ViewModel: ObservableObject {
             }
         }
         if cell.row == selectedRow && cell.col == selectedCol {
-            return .realYellow
+            if data[cell.row][cell.col].type == .error {
+                return .yellow
+            } else {
+                return .realYellow
+            }
         }
         switch cellData.type {
         case .open:     return .white
@@ -178,4 +279,5 @@ class ViewModel: ObservableObject {
         case .error:    return .red
         }
     }
+    
 }
