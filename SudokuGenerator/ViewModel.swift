@@ -118,7 +118,7 @@ class ViewModel: ObservableObject {
                 selectedCol = -1
             } else {
                 let cellData = data[cell.row][cell.col]
-                if cellData.type == .open  || cellData.type == .error {
+                if cellData.open  || !cellData.valid {
                     selectedRow = cell.row
                     selectedCol = cell.col
                 }
@@ -154,7 +154,7 @@ class ViewModel: ObservableObject {
         data = originalData
         for row in 0..<9 {
             for col in 0..<9 {
-                data[row][col].type = .open
+                data[row][col].open = true
             }
         }
         selectedRow = -1
@@ -167,7 +167,7 @@ class ViewModel: ObservableObject {
         for row in 0..<9 {
             for col in 0..<9 {
                 if data[row][col].value != 0 {
-                    data[row][col].type = .locked
+                    data[row][col].open = false
                 }
             }
         }
@@ -251,7 +251,7 @@ class ViewModel: ObservableObject {
         for base in array {
             for search in array {
                 if search.equals(base) {
-                    data[search.row][search.col].type = .error
+                    data[search.row][search.col].valid = false
                     thereAreErrors = true
                 }
             }
@@ -262,24 +262,20 @@ class ViewModel: ObservableObject {
     func chooseMyColor(_ cell: Cell) -> Color {
         let cellData = data[cell.row][cell.col]
         if isAllCorrect {
-            if data[cell.row][cell.col].type == .locked {
+            if !data[cell.row][cell.col].open {
                 return .lockGreen
             } else {
                 return .unlockedGreen
             }
         }
         if cell.row == selectedRow && cell.col == selectedCol {
-            if data[cell.row][cell.col].type == .error {
+            if !data[cell.row][cell.col].valid {
                 return .yellow
             } else {
                 return .realYellow
             }
         }
-        switch cellData.type {
-        case .open:     return .white
-        case .locked:   return .lockedCell
-        case .error:    return .red
-        }
+        return cellData.valid ? cellData.open ? .white : .lockedCell : .red
     }
     
 }
