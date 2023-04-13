@@ -102,6 +102,8 @@ class ViewModel: ObservableObject {
                 }
             }
             if isEverythingFilled() {
+                selectedRow = -1
+                selectedCol = -1
                 if andThereAreNoErrors() {
                     isAllCorrect = true
                 }
@@ -263,7 +265,7 @@ class ViewModel: ObservableObject {
             if data[cell.row][cell.col].type == .locked {
                 return .lockGreen
             } else {
-                return .realGreen
+                return .unlockedGreen
             }
         }
         if cell.row == selectedRow && cell.col == selectedCol {
@@ -275,7 +277,7 @@ class ViewModel: ObservableObject {
         }
         switch cellData.type {
         case .open:     return .white
-        case .locked:   return .realGrey
+        case .locked:   return .lockedCell
         case .error:    return .red
         }
     }

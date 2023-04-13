@@ -43,7 +43,7 @@ struct ContentView: View {
                             .fontWeight(.bold)
                             .padding()
                             .foregroundColor(.white)
-                            .background(disableShuffle ? Color.realGrey : Color.green)
+                            .background(disableShuffle ? Color.lockedCell : Color.green)
                     }
                     .disabled(disableShuffle)
                     Button {
@@ -70,7 +70,7 @@ struct ContentView: View {
                             .fontWeight(.bold)
                             .padding()
                             .foregroundColor(.white)
-                            .background(disableExclude ? Color.realGrey : Color.green)
+                            .background(disableExclude ? Color.lockedCell : Color.green)
                     }
                     .disabled(disableExclude)
                     Button {
@@ -81,7 +81,7 @@ struct ContentView: View {
                             .fontWeight(.bold)
                             .padding()
                             .foregroundColor(.white)
-                            .background(disableExclude ? Color.realGrey : Color.green)
+                            .background(disableExclude ? Color.lockedCell : Color.green)
                     }
                     .disabled(disableExclude)
                 }
@@ -101,7 +101,7 @@ struct ContentView: View {
                     .padding()
                     .frame(width: UIScreen.main.bounds.width - 20)
                     .foregroundColor(.white)
-                    .background(disableLock ? Color.realGrey : Color.green)
+                    .background(disableLock ? Color.lockedCell : Color.green)
             }
             .disabled(disableLock)
 

@@ -9,10 +9,10 @@ import SwiftUI
 
 extension Color {
     
-    static let realYellow = Color(red: 255/255, green: 255/255, blue:   0/255)
-    static let realGrey   = Color(red: 200/255, green: 200/255, blue: 200/255)
-    static let realGreen  = Color(red:   0/255, green: 240/255, blue:   0/255)
-    static let lockGreen  = Color(red:  28/255, green: 200/255, blue:  28/255)
-    static let realRed    = Color(red: 240/255, green:   0/255, blue:   0/255)
+    static let realYellow     = Color(red: 255/255, green: 255/255, blue:   0/255)
+    static let lockedCell     = Color(red:  93/100, green:  93/100, blue:  93/100)
+    static let unlockedGreen  = Color(red:  47/100, green: 100/100, blue:  26/100)
+    static let lockGreen      = Color(red:  73/100, green: 100/100, blue:  47/100)
+    static let realRed        = Color(red: 240/255, green:   0/255, blue:   0/255)
 
 }
