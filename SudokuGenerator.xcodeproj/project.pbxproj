@@ -20,6 +20,8 @@
 		C1A0926B29D66706007750FA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A0926A29D66706007750FA /* ContentView.swift */; };
 		C1A0926D29D66707007750FA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1A0926C29D66707007750FA /* Assets.xcassets */; };
 		C1A0927029D66707007750FA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1A0926F29D66707007750FA /* Preview Assets.xcassets */; };
+		C1C6823829F3A3C900146D2E /* Play.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C6823729F3A3C900146D2E /* Play.swift */; };
+		C1C6823A29F3A41300146D2E /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C6823929F3A41300146D2E /* Stack.swift */; };
 		C1CD3D0429DCE56E00C1FF96 /* BoardExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CD3D0329DCE56E00C1FF96 /* BoardExtension.swift */; };
 		C1CD3D0829DCE5F400C1FF96 /* CellExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CD3D0729DCE5F400C1FF96 /* CellExtension.swift */; };
 		C1F008AC29DE41C00084D368 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F008AB29DE41C00084D368 /* Block.swift */; };
@@ -40,6 +42,8 @@
 		C1A0926A29D66706007750FA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		C1A0926C29D66707007750FA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C1A0926F29D66707007750FA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		C1C6823729F3A3C900146D2E /* Play.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Play.swift; sourceTree = "<group>"; };
+		C1C6823929F3A41300146D2E /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
 		C1CD3D0329DCE56E00C1FF96 /* BoardExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardExtension.swift; sourceTree = "<group>"; };
 		C1CD3D0729DCE5F400C1FF96 /* CellExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellExtension.swift; sourceTree = "<group>"; };
 		C1F008AB29DE41C00084D368 /* Block.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
@@ -60,7 +64,9 @@
 			isa = PBXGroup;
 			children = (
 				C10BC4BC29E7504800A093EB /* CellData.swift */,
+				C1C6823729F3A3C900146D2E /* Play.swift */,
 				C1023C0129E1226F000B2E89 /* Shuffle.swift */,
+				C1C6823929F3A41300146D2E /* Stack.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -225,8 +231,10 @@
 				C1F008AC29DE41C00084D368 /* Block.swift in Sources */,
 				C1A0926929D66706007750FA /* SudokuGeneratorApp.swift in Sources */,
 				C10BC4BD29E7504800A093EB /* CellData.swift in Sources */,
+				C1C6823A29F3A41300146D2E /* Stack.swift in Sources */,
 				C10A0CFE29D88A2500CB0952 /* Cell.swift in Sources */,
 				C1023BFB29E0D258000B2E89 /* ColorExtension.swift in Sources */,
+				C1C6823829F3A3C900146D2E /* Play.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

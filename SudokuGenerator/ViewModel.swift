@@ -91,13 +91,18 @@ class ViewModel: ObservableObject {
     
     private var running = false
     var isRunning: Bool { running }
+    private var stack = Stack()
+    var canUndo: Bool { stack.canUndo }
+    var canRedo: Bool { stack.canRedo }
 
     func tapSource(_ value: Int) {
         if !isAllCorrect {
             if selectedRow >= 0 {
                 if data[selectedRow][selectedCol].value == value {
+                    stack.put(Play(row: selectedRow, col: selectedCol, oldValue: data[selectedRow][selectedCol].value, newValue: 0))
                     data[selectedRow][selectedCol].value = 0
                 } else {
+                    stack.put(Play(row: selectedRow, col: selectedCol, oldValue: data[selectedRow][selectedCol].value, newValue: value))
                     data[selectedRow][selectedCol].value = value
                 }
             }
@@ -113,14 +118,16 @@ class ViewModel: ObservableObject {
     
     func tapCell(_ cell: Cell) {
         if !isAllCorrect {
+            if isRunning {
                 if cell.row == selectedRow && cell.col == selectedCol {
-                selectedRow = -1
-                selectedCol = -1
-            } else {
-                let cellData = data[cell.row][cell.col]
-                if cellData.open  || !cellData.valid {
-                    selectedRow = cell.row
-                    selectedCol = cell.col
+                    selectedRow = -1
+                    selectedCol = -1
+                } else {
+                    let cellData = data[cell.row][cell.col]
+                    if cellData.open  || !cellData.valid {
+                        selectedRow = cell.row
+                        selectedCol = cell.col
+                    }
                 }
             }
         }
@@ -161,6 +168,7 @@ class ViewModel: ObservableObject {
         selectedCol = -1
         isAllCorrect = false
         running = false
+        stack.reset()
     }
     
     func lock() {
@@ -276,6 +284,18 @@ class ViewModel: ObservableObject {
             }
         }
         return cellData.valid ? cellData.open ? .white : .lockedCell : .red
+    }
+    
+    func undo() {
+        if let play = stack.undo() {
+            data[play.row][play.col].value = play.oldValue
+        }
+    }
+    
+    func redo() {
+        if let play = stack.redo() {
+            data[play.row][play.col].value = play.newValue
+        }
     }
     
 }
