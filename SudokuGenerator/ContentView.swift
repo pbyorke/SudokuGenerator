@@ -61,9 +61,9 @@ struct ContentView: View {
                     }
                     Button {
                         vm.undo()
-                        disableLock = false
-                        disableExclude = false
-                        disableShuffle = false
+//                        disableLock = false
+//                        disableExclude = false
+//                        disableShuffle = false
                     } label: {
                         Text("undo")
                             .font(.caption)
@@ -75,9 +75,9 @@ struct ContentView: View {
                     .disabled(!vm.canUndo)
                     Button {
                         vm.redo()
-                        disableLock = false
-                        disableExclude = false
-                        disableShuffle = false
+//                        disableLock = false
+//                        disableExclude = false
+//                        disableShuffle = false
                     } label: {
                         Text("redo")
                             .font(.caption)
