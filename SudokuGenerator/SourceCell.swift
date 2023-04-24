@@ -11,8 +11,8 @@ struct SourceCell: View {
     
     @EnvironmentObject private var vm: ViewModel
 
-    let value: Int
-    var width: CGFloat { (UIScreen.main.bounds.width - 20) / 9 }
+    private let value: Int
+    private var width: CGFloat { (UIScreen.main.bounds.width - 20) / 11 }
     
     init(value: Int) {
         self.value = value

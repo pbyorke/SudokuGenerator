@@ -59,34 +59,6 @@ struct ContentView: View {
                             .foregroundColor(.white)
                             .background(Color.green)
                     }
-                    Button {
-                        vm.undo()
-//                        disableLock = false
-//                        disableExclude = false
-//                        disableShuffle = false
-                    } label: {
-                        Text("undo")
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .padding()
-                            .foregroundColor(.white)
-                            .background(!vm.canUndo ? Color.lockedCell : Color.green)
-                    }
-                    .disabled(!vm.canUndo)
-                    Button {
-                        vm.redo()
-//                        disableLock = false
-//                        disableExclude = false
-//                        disableShuffle = false
-                    } label: {
-                        Text("redo")
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .padding()
-                            .foregroundColor(.white)
-                            .background(!vm.canRedo ? Color.lockedCell : Color.green)
-                    }
-                    .disabled(!vm.canRedo)
                 }
                 .padding(.bottom)
                 HStack {

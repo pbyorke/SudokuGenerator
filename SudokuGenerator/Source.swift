@@ -11,8 +11,9 @@ struct Source: View {
 
     @EnvironmentObject private var vm: ViewModel
     
-    var cells = [SourceCell]()
-    
+    private var cells = [SourceCell]()
+    private var width: CGFloat { (UIScreen.main.bounds.width - 20) / 11 }
+
     init() {
         for col in 1...9 {
             cells.append(SourceCell(value: col))
@@ -21,15 +22,33 @@ struct Source: View {
     
     var body: some View {
             HStack(spacing: 0) {
-                cells[0]
-                cells[1]
-                cells[2]
-                cells[3]
-                cells[4]
-                cells[5]
-                cells[6]
-                cells[7]
-                cells[8]
+                Button {
+                    vm.undo()
+                } label: {
+                    HStack(spacing: 0) {
+                        Image(systemName: "arrow.uturn.backward")
+                    }
+                    .frame(width: width, height: width)
+                }
+                HStack(spacing: 0) {
+                    cells[0]
+                    cells[1]
+                    cells[2]
+                    cells[3]
+                    cells[4]
+                    cells[5]
+                    cells[6]
+                    cells[7]
+                    cells[8]
+                }
+                Button {
+                    vm.redo()
+                } label: {
+                    HStack(spacing: 0) {
+                        Image(systemName: "arrow.uturn.forward")
+                    }
+                    .frame(width: width, height: width)
+                }
             }
         .overlay(
             RoundedRectangle(cornerRadius: 0)

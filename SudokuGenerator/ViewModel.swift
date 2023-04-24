@@ -138,10 +138,13 @@ class ViewModel: ObservableObject {
     }
     
     func exclude1() {
-        let row = Int.random(in: 0..<9)
-        let col = Int.random(in: 0..<9)
-        if data[row][col].value != 0 {
-            data[row][col].value = 0
+        while !isEverythingEmpty() {
+            let row = Int.random(in: 0..<9)
+            let col = Int.random(in: 0..<9)
+            if data[row][col].value != 0 {
+                data[row][col].value = 0
+                return
+            }
         }
     }
     
@@ -193,8 +196,24 @@ class ViewModel: ObservableObject {
         return true
     }
 
+    private func isEverythingEmpty() -> Bool {
+        for row in 0...8 {
+            for col in 0...8 {
+                if data[row][col].value != 0 {
+                    return false
+                }
+            }
+        }
+        return true
+    }
+
     private func andThereAreNoErrors() -> Bool {
         var noErrorsFound = true
+        for row in 0...8 {
+            for col in 0...8 {
+                data[row][col].valid = true
+            }
+        }
         if columnsHaveErrors() {
             noErrorsFound = false
         }
