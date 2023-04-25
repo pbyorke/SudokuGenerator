@@ -20,6 +20,7 @@ class ViewModel: ObservableObject {
     @Published var selectedRow = -1
     @Published var selectedCol = -1
     @Published var isAllCorrect = false
+    @Published var usedUpSource = [0,0,0,0,0,0,0,0,0,0]
     
     @Published var data = [
         [CellData(0,0,1),CellData(0,1,2),CellData(0,2,3),
@@ -101,9 +102,11 @@ class ViewModel: ObservableObject {
                 if data[selectedRow][selectedCol].value == value {
                     stack.put(Play(row: selectedRow, col: selectedCol, oldValue: data[selectedRow][selectedCol].value, newValue: 0))
                     data[selectedRow][selectedCol].value = 0
+                    lookForUsedUpSource()
                 } else {
                     stack.put(Play(row: selectedRow, col: selectedCol, oldValue: data[selectedRow][selectedCol].value, newValue: value))
                     data[selectedRow][selectedCol].value = value
+                    lookForUsedUpSource()
                 }
             }
             if isEverythingFilled() {
@@ -112,6 +115,15 @@ class ViewModel: ObservableObject {
                 if andThereAreNoErrors() {
                     isAllCorrect = true
                 }
+            }
+        }
+    }
+    
+    private func lookForUsedUpSource() {
+        for number in 0...9 { usedUpSource[number] = 0 }
+        for row in 0...8 {
+            for col in 0...8 {
+                usedUpSource[data[row][col].value] += 1
             }
         }
     }
@@ -182,6 +194,7 @@ class ViewModel: ObservableObject {
                 }
             }
         }
+        lookForUsedUpSource()
         running = true
     }
         

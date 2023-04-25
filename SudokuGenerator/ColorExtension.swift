@@ -14,5 +14,6 @@ extension Color {
     static let unlockedGreen  = Color(red:  47/100, green: 100/100, blue:  26/100)
     static let lockGreen      = Color(red:  73/100, green: 100/100, blue:  47/100)
     static let realRed        = Color(red: 240/255, green:   0/255, blue:   0/255)
+    static let lightRed       = Color(red: 255/255, green: 128/255, blue: 100/255)
 
 }
