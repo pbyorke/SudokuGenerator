@@ -330,4 +330,15 @@ class ViewModel: ObservableObject {
         }
     }
     
+    func solve() {
+        var grid = [[Int]](repeating: [Int](repeating: 0, count: 9), count: 9)
+        for row in 0..<9 {
+            for col in 0..<9 {
+                grid[row][col] = data[row][col].value
+            }
+        }
+        let solver = Sudoku.AlgorithmXSolver(size: 3, grid: grid)
+        solver.run(grid)
+    }
+    
 }

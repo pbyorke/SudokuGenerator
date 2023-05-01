@@ -77,7 +77,7 @@ class Sudoku {
 // /************************************************************************************************************************************************************/
 
     func solve() {
-        var solver = AlgorithmXSolver(size: SIZE, grid: Grid)
+        let solver = AlgorithmXSolver(size: SIZE, grid: Grid)
         solver.run(Grid)
     } // end func solve
 
@@ -92,11 +92,11 @@ class Sudoku {
      private var solution = [Node]()
      
      func run(_ initialMatrix: [[Int]]) {
-         var matrix = createMatrix(initialMatrix) // create the sparse matrix. We use the type byte to speed things up. I tried using
+         let matrix = createMatrix(initialMatrix) // create the sparse matrix. We use the type byte to speed things up. I tried using
          // using all the primitive types, expecting the same results in terms
          // of speed; the only performance boost should have been in terms of space.
          // Yet, there was a marked difference in the running times. Hence, I used byte[][] whenever possible.
-         var doubleLinkedList = createDoubleLinkedLists(matrix)
+         let _ = createDoubleLinkedLists(matrix)
          search(0) // start the Dancing Links process of searching and covering and uncovering recursively
      }
      
@@ -141,90 +141,73 @@ class Sudoku {
      }
 
      // MARK: - local routines
-//  // create a sparse matrix for Grid
-//  private byte[][] createMatrix(int[][] initialMatrix)
-//  {
-     private func createMatrix(_ initialMatrix: [[Int]]) -> [[Int]] {
-//   int[][] clues = null; // stores the numbers that are already given on the board i.e. the 'clues'
-//   ArrayList cluesList = new ArrayList(); // the list used to get the clues. Because we use a raw ArrayList, we later have to cast to int[] before storing in clues
-//   int counter = 0;
-//   for(int r = 0; r < N; r++) // iterates over the rows of Grid
-//   {
-//    for(int c = 0; c < N; c++) // iterates over the columns of Grid
-//    {
-//     if(initialMatrix[r][c] > 0) // if the number on the Grid is != 0 (the number is a clue and not a blank space to solved for), then store it
-//     {
-//      cluesList.add(new int[]{initialMatrix[r][c],r,c}); // store the number, the row number and the column number
-//      counter++;
-//     }
-//    }
-//   }
-//   clues = new int[counter][]; // store the clues once we've gotten them
-//   for(int i = 0; i < counter; i++)
-//   {
-//    clues[i] = (int[])cluesList.get(i);
-//   }
-//
-//   // Now, we build our sparse matrix
-//   byte[][] matrix = new byte[N*N*N][4*N*N];
-         var matrix = [[Int]](repeating: [Int](repeating: 0, count: 4 * N * N), count: N * N * N)
-//   // The rows of our matrix represent all the possibilities, whereas the columns represent the constraints.
-//   // Hence, there are N^3 rows (N rows * N columns * N numbers), and N^2 * 4 columns (N rows * N columns * 4 constraints)
-//
-//   // iterate over all the possible digits d
-//   for(int d = 0; d < N; d++)
-//   {
-//    // iterate over all the possible rows r
-//    for(int r = 0; r < N; r++)
-//    {
-//     // iterator over all the possible columns c
-//     for(int c = 0; c < N; c++)
-//     {
-//      if(!filled(d,r,c,clues)) // if the cell is not already filled
-//      {
-//       // this idea for this way of mapping the sparse matrix is taken from the Python implementation: https://code.google.com/p/narorumo/wiki/SudokuDLX
-//       int rowIndex = c + (N * r) + (N * N * d);
-//       // there are four 1s in each row, one for each constraint
-//       int blockIndex = ((c / SIZE) + ((r / SIZE) * SIZE));
-//       int colIndexRow = 3*N*d+r;
-//       int colIndexCol = 3*N*d+N+c;
-//       int colIndexBlock = 3*N*d+2*N+blockIndex;
-//       int colIndexSimple = 3*N*N+(c+N*r);
-//       // fill in the 1's
-//       matrix[rowIndex][colIndexRow] = 1;
-//       matrix[rowIndex][colIndexCol] = 1;
-//       matrix[rowIndex][colIndexBlock] = 1;
-//       matrix[rowIndex][colIndexSimple] = 1;
-//      }
-//     }
-//    }
-//   }
-   return matrix;
-  } // end func createMatrix
 
-     
-     
-     
-     
-     
+     // create a sparse matrix for Grid
+     private func createMatrix(_ initialMatrix: [[Int]]) -> [[Int]] {
+         var clues = [[Int]]() // stores the numbers that are already given on the board i.e. the 'clues'
+         var cluesList = [[Int]]() // the list used to get the clues. Because we use a raw ArrayList, we later have to cast to int[] before storing in clues
+         var counter = 0
+         for r in 0..<N { // iterates over the rows of Grid
+             for c in 0..<N { // iterates over the columns of Grid
+                 if initialMatrix[r][c] > 0 { // if the number on the Grid is != 0 (the number is a clue and not a blank space to solved for), then store it
+                     cluesList.append([initialMatrix[r][c], r, c]) // store the number, the row number and the column number
+                     counter += 1
+                 }
+             }
+         }
+         clues = [[Int]](repeating: [Int](repeating: 0, count: 3), count: counter) // store the clues once we've gotten them
+         for i in 0..<counter {
+             clues[i] = cluesList[i]
+         }
+         
+         // Now, we build our sparse matrix
+         var matrix = [[Int]](repeating: [Int](repeating: 0, count: 4 * N * N), count: N * N * N)
+         // The rows of our matrix represent all the possibilities, whereas the columns represent the constraints.
+         // Hence, there are N^3 rows (N rows * N columns * N numbers), and N^2 * 4 columns (N rows * N columns * 4 constraints)
+         //
+         // iterate over all the possible digits d
+         for d in 0..<N {
+             // iterate over all the possible rows r
+             for r in 0..<N {
+                 // iterator over all the possible columns c
+                 for c in 0..<N {
+                     if !filled(digit: d, row: r, col: c, prefill: clues) { // if the cell is not already filled
+                         // this idea for this way of mapping the sparse matrix is taken from the Python implementation: https://code.google.com/p/narorumo/wiki/SudokuDLX
+                         let rowIndex = c + (N * r) + (N * N * d)
+                         // there are four 1s in each row, one for each constraint
+                         let blockIndex = ((c / SIZE) + ((r / SIZE) * SIZE))
+                         let colIndexRow = 3 * N * d + r
+                         let colIndexCol =  3 * N * d + N + c
+                         let colIndexBlock = 3 * N * d + 2 * N + blockIndex
+                         let colIndexSimple = 3 * N * N + (c + N * r)
+                         // fill in the 1's
+                         matrix[rowIndex][colIndexRow] = 1
+                         matrix[rowIndex][colIndexCol] = 1
+                         matrix[rowIndex][colIndexBlock] = 1
+                         matrix[rowIndex][colIndexSimple] = 1
+                     }
+                 }
+             }
+         }
+         return matrix;
+     } // end func createMatrix
+
      // check if the cell to be filled is already filled with a digit. The idea for this is credited to Alex Rudnick as cited above
      private func filled(digit: Int, row: Int, col: Int, prefill: [[Int]]) -> Bool {
          var filled = false
          if prefill.count != 0 {
              for i in 0..<prefill.count {
-                 var d = prefill[i][0] - 1
-                 var r = prefill[i][1]
-                 var c = prefill [i][2]
+                 let d = prefill[i][0] - 1
+                 let r = prefill[i][1]
+                 let c = prefill [i][2]
                  // calculate the block indices
-                 var blockStartIndexCol = (c / SIZE) * SIZE
-                 var blockEndIndexCol = blockStartIndexCol + SIZE
-                 var blockStartIndexRow = (r / SIZE) * SIZE
-                 var blockEndIndexRow = blockStartIndexRow + SIZE
+                 let blockStartIndexCol = (c / SIZE) * SIZE
+                 let blockEndIndexCol = blockStartIndexCol + SIZE
+                 let blockStartIndexRow = (r / SIZE) * SIZE
+                 let blockEndIndexRow = blockStartIndexRow + SIZE
                  
                  if d != digit && row == r && col == c {
-                     //      filled = true;
                      filled = true
-                     //     } else if((d == digit) && (row == r || col == c) && !(row == r && col == c)) {
                  } else if (d == digit) && (row == r || col == c) && !(row == r && col == c) {
                      filled = true
                  } else if (d == digit) && (row > blockStartIndexRow) && (row < blockEndIndexRow) && (col > blockStartIndexCol) && (col < blockEndIndexCol) && !(row == r && col == c) {
@@ -235,11 +218,6 @@ class Sudoku {
          return filled;
      } // end func filled
 
-     
-     
-     
-     
-     
      // the method to convert the sparse matrix Exact Cover problem to a doubly-linked list, which will allow us to later
      // perform our Dancing Links magic.
      // Given that we have 4 constraints for Sudoku, I created a new class ColumnID that is a property of all columns.
@@ -255,14 +233,19 @@ class Sudoku {
          // getting the column heads from the sparse matrix and filling in the information about the
          // constraints. We iterate for all the column heads, thus going through all the items in the first row of the sparse matrix
          for col in 0..<matrix[0].count {
+             
+             
+             print("col \(col)")
+             
+             
              // We create the ColumnID that will store the information. We will later map this ID to the current curColumn
-             var id: ColumnID? = ColumnID()
+             let id: ColumnID? = ColumnID()
              if col < 3 * N * N {
                  // identifying the digit
-                 var digit = (col / (3 * N)) + 1
+                 let digit = (col / (3 * N)) + 1
                  id?.number = digit
                  // is it for a row, column or block?
-                 var index = col - (digit - 1) * 3 * N
+                 let index = col - (digit - 1) * 3 * N
                  if index < N {
                      id?.constraint = 0 // we're in the row constraint
                      id?.position = index
@@ -340,7 +323,7 @@ class Sudoku {
              mapSolvedToGrid() // map the solved linked list to the grid
              return
          }
-         var c = choose() // we choose a column to cover
+         let c = choose() // we choose a column to cover
          cover(c)
          var r = c?.down
          while r != c {
@@ -356,7 +339,7 @@ class Sudoku {
                  j = j?.right
              }
              search(index + 1) //recursively search
-             var r2: Node? = solution[index]
+             let r2: Node? = solution[index]
              var j2 = r2?.left
              while j2 != r2 {
                  uncover(j2?.head)
