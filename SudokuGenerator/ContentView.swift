@@ -59,6 +59,16 @@ struct ContentView: View {
                             .foregroundColor(.white)
                             .background(Color.green)
                     }
+//                    Button {
+//                        vm.solve()
+//                    } label: {
+//                        Text("solve")
+//                            .font(.caption)
+//                            .fontWeight(.bold)
+//                            .padding()
+//                            .foregroundColor(.white)
+//                            .background(Color.green)
+//                    }
                 }
                 .padding(.bottom)
                 HStack {
