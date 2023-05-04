@@ -17,6 +17,8 @@ struct ContentView: View {
     @State private var disableShuffle = false
     @State private var disableExclude = false
     @State private var disableLock = false
+    @State private var isShowingReach = false
+    @State private var isShowingErrors = false
 
     init() {
         board = Board()
@@ -96,8 +98,17 @@ struct ContentView: View {
                     .disabled(disableExclude)
                 }
                 .padding(.bottom)
-            }
-            HStack {
+                Divider()
+                Toggle("Show used numbers", isOn: $vm.isShowingUsed)
+                Toggle("Show reach", isOn: $isShowingReach)
+                    .onChange(of: isShowingReach) { value in
+                        vm.onChangeIsShowingReach(value: value)
+                    }
+                Toggle("Show errors", isOn: $isShowingErrors)
+                    .onChange(of: isShowingErrors) { value in
+                        vm.onChangeIsShowingErrors(value: value)
+                    }
+                    .padding(.bottom)
             }
             Button {
                 vm.lock()

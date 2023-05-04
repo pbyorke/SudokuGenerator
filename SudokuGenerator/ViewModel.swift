@@ -17,10 +17,13 @@ class ViewModel: ObservableObject {
     
     static var shared = ViewModel()
     
-    @Published var selectedRow = -1
-    @Published var selectedCol = -1
+    @Published var selectedRow = -3
+    @Published var selectedCol = -3
     @Published var isAllCorrect = false
     @Published var usedUpSource = [0,0,0,0,0,0,0,0,0,0]
+    @Published var isShowingUsed = false
+    @Published var isShowingReach = false
+    @Published var isShowingErrors = false
     
     @Published var data = [
         [CellData(0,0,1),CellData(0,1,2),CellData(0,2,3),
@@ -41,18 +44,18 @@ class ViewModel: ObservableObject {
          CellData(4,3,8),CellData(4,4,9),CellData(4,5,7),
          CellData(4,6,2),CellData(4,7,3),CellData(4,8,1)],
         [CellData(5,0,8),CellData(5,1,9),CellData(5,2,7),
-         CellData(5,3,2),CellData(5,4,3),CellData(6,5,1),
+         CellData(5,3,2),CellData(5,4,3),CellData(5,5,1),
          CellData(5,6,5),CellData(5,7,6),CellData(5,8,4)],
-                
+        
         
         [CellData(6,0,3),CellData(6,1,1),CellData(6,2,2),
-         CellData(6,3,6),CellData(6,4,4),CellData(7,5,5),
+         CellData(6,3,6),CellData(6,4,4),CellData(6,5,5),
          CellData(6,6,9),CellData(6,7,7),CellData(6,8,8)],
         [CellData(7,0,6),CellData(7,1,4),CellData(7,2,5),
-         CellData(7,3,9),CellData(7,4,7),CellData(8,5,8),
+         CellData(7,3,9),CellData(7,4,7),CellData(7,5,8),
          CellData(7,6,3),CellData(7,7,1),CellData(7,8,2)],
         [CellData(8,0,9),CellData(8,1,7),CellData(8,2,8),
-         CellData(8,3,3),CellData(8,4,1),CellData(9,5,2),
+         CellData(8,3,3),CellData(8,4,1),CellData(8,5,2),
          CellData(8,6,6),CellData(8,7,4),CellData(8,8,5)],
     ]
     
@@ -75,18 +78,18 @@ class ViewModel: ObservableObject {
          CellData(4,3,8),CellData(4,4,9),CellData(4,5,7),
          CellData(4,6,2),CellData(4,7,3),CellData(4,8,1)],
         [CellData(5,0,8),CellData(5,1,9),CellData(5,2,7),
-         CellData(5,3,2),CellData(5,4,3),CellData(6,5,1),
+         CellData(5,3,2),CellData(5,4,3),CellData(5,5,1),
          CellData(5,6,5),CellData(5,7,6),CellData(5,8,4)],
-                
+        
         
         [CellData(6,0,3),CellData(6,1,1),CellData(6,2,2),
-         CellData(6,3,6),CellData(6,4,4),CellData(7,5,5),
+         CellData(6,3,6),CellData(6,4,4),CellData(6,5,5),
          CellData(6,6,9),CellData(6,7,7),CellData(6,8,8)],
         [CellData(7,0,6),CellData(7,1,4),CellData(7,2,5),
-         CellData(7,3,9),CellData(7,4,7),CellData(8,5,8),
+         CellData(7,3,9),CellData(7,4,7),CellData(7,5,8),
          CellData(7,6,3),CellData(7,7,1),CellData(7,8,2)],
         [CellData(8,0,9),CellData(8,1,7),CellData(8,2,8),
-         CellData(8,3,3),CellData(8,4,1),CellData(9,5,2),
+         CellData(8,3,3),CellData(8,4,1),CellData(8,5,2),
          CellData(8,6,6),CellData(8,7,4),CellData(8,8,5)],
     ]
     
@@ -95,7 +98,7 @@ class ViewModel: ObservableObject {
     private var stack = Stack()
     var canUndo: Bool { stack.canUndo }
     var canRedo: Bool { stack.canRedo }
-
+    
     func tapSource(_ value: Int) {
         if !isAllCorrect {
             if selectedRow >= 0 {
@@ -110,8 +113,8 @@ class ViewModel: ObservableObject {
                 }
             }
             if isEverythingFilled() {
-                selectedRow = -1
-                selectedCol = -1
+                selectedRow = -3
+                selectedCol = -3
                 if andThereAreNoErrors() {
                     isAllCorrect = true
                 }
@@ -132,19 +135,23 @@ class ViewModel: ObservableObject {
         if !isAllCorrect {
             if isRunning {
                 if cell.row == selectedRow && cell.col == selectedCol {
-                    selectedRow = -1
-                    selectedCol = -1
+                    selectedRow = -3
+                    selectedCol = -3
+                    calculateReach()
+                    calculateErrors()
                 } else {
                     let cellData = data[cell.row][cell.col]
                     if cellData.open  || !cellData.valid {
                         selectedRow = cell.row
                         selectedCol = cell.col
+                        calculateReach()
+                        calculateErrors()
                     }
                 }
             }
         }
     }
-
+    
     func shuffle() {
         Shuffle().run()
     }
@@ -179,8 +186,8 @@ class ViewModel: ObservableObject {
                 data[row][col].open = true
             }
         }
-        selectedRow = -1
-        selectedCol = -1
+        selectedRow = -3
+        selectedCol = -3
         isAllCorrect = false
         running = false
         stack.reset()
@@ -197,7 +204,7 @@ class ViewModel: ObservableObject {
         lookForUsedUpSource()
         running = true
     }
-        
+    
     private func isEverythingFilled() -> Bool {
         for row in 0...8 {
             for col in 0...8 {
@@ -208,7 +215,7 @@ class ViewModel: ObservableObject {
         }
         return true
     }
-
+    
     private func isEverythingEmpty() -> Bool {
         for row in 0...8 {
             for col in 0...8 {
@@ -219,7 +226,7 @@ class ViewModel: ObservableObject {
         }
         return true
     }
-
+    
     private func andThereAreNoErrors() -> Bool {
         var noErrorsFound = true
         for row in 0...8 {
@@ -285,7 +292,7 @@ class ViewModel: ObservableObject {
         }
         return errorsFound
     }
-
+    
     private func analyzeArray(_ array: [CellData]) -> Bool {
         var thereAreErrors = false
         for base in array {
@@ -298,7 +305,97 @@ class ViewModel: ObservableObject {
         }
         return thereAreErrors
     }
-
+    
+//    private func sameRowx(_ cell: CellData) -> Bool {
+//        if cell.row == selectedRow && cell.col == selectedCol { return false }
+//        if !cell.open { return false}
+//        return cell.row == selectedRow
+//    }
+//
+//    private func sameColx(_ cell: CellData) -> Bool {
+//        if cell.row == selectedRow && cell.col == selectedCol { return false }
+//        if !cell.open { return false}
+//        return cell.col == selectedCol
+//    }
+//
+//    private func sameBlockx(_ cell: CellData) -> Bool {
+//        if cell.row == selectedRow && cell.col == selectedCol { return false }
+//        if !cell.open { return false}
+//        return (cell.row / 3) == (selectedRow / 3) && (cell.col / 3) == (selectedCol / 3)
+//    }
+    
+    private func calculateReach() {
+        for row in 0..<9 {
+            for col in 0..<9 {
+                data[row][col].reach = false
+            }
+        }
+        if isShowingReach {
+            if selectedRow != -3 {
+                let rows = sameRow(row: selectedRow)
+                for row in rows {
+                    if row.col != selectedCol {
+                        if data[row.row][row.col].value == 0 {
+                            data[row.row][row.col].reach = true
+                        }
+                    }
+                }
+                let cols = sameCol(col: selectedCol)
+                for col in cols {
+                    if col.row != selectedRow {
+                        if data[col.row][col.col].value == 0 {
+                            data[col.row][col.col].reach = true
+                        }
+                    }
+                }
+                let nons = sameNon(row: selectedRow, col: selectedCol)
+                for non in nons {
+                    if non.row != selectedRow || non.col != selectedCol {
+                        if data[non.row][non.col].value == 0 {
+                            data[non.row][non.col].reach = true
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private func calculateErrors() {
+        for row in 0..<9 {
+            for col in 0..<9 {
+                data[row][col].valid = true
+            }
+        }
+        if isShowingErrors {
+            if selectedRow != -3 {
+                let rows = sameRow(row: selectedRow)
+                for row in rows {
+                    if row.col != selectedCol {
+                        if data[row.row][row.col].value == 0 {
+                            data[row.row][row.col].valid = false
+                        }
+                    }
+                }
+                let cols = sameCol(col: selectedCol)
+                for col in cols {
+                    if col.row != selectedRow {
+                        if data[col.row][col.col].value == 0 {
+                            data[col.row][col.col].valid = false
+                        }
+                    }
+                }
+                let nons = sameNon(row: selectedRow, col: selectedCol)
+                for non in nons {
+                    if non.row != selectedRow || non.col != selectedCol {
+                        if data[non.row][non.col].value == 0 {
+                            data[non.row][non.col].valid = false
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     func chooseMyColor(_ cell: Cell) -> Color {
         let cellData = data[cell.row][cell.col]
         if isAllCorrect {
@@ -307,6 +404,9 @@ class ViewModel: ObservableObject {
             } else {
                 return .unlockedGreen
             }
+        }
+        if data[cell.row][cell.col].reach {
+            return .lightYellow
         }
         if cell.row == selectedRow && cell.col == selectedCol {
             if !data[cell.row][cell.col].valid {
@@ -339,6 +439,57 @@ class ViewModel: ObservableObject {
         }
         let solver = Sudoku.AlgorithmXSolver(size: 3, grid: grid)
         solver.run(grid)
+    }
+    
+    private func sameRow(row: Int) -> [CellData] {
+        var array = [CellData]()
+        for col in 0..<9 {
+            array.append(data[row][col])
+        }
+        
+        print("sameRow")
+        for cell in array { print("  \(cell.row),\(cell.col)", terminator: "") }
+        print("")
+        
+        return array
+    }
+    
+    private func sameCol(col: Int) -> [CellData] {
+        var array = [CellData]()
+        for row in 0..<9 {
+            array.append(data[row][col])
+        }
+        
+        print("sameCol")
+        for cell in array { print("  \(cell.row),\(cell.col)", terminator: "") }
+        print("")
+        
+        return array
+    }
+    
+    private func sameNon(row: Int, col: Int) -> [CellData] {
+        var array = [CellData]()
+        for r in row / 3 * 3...row / 3 * 3 + 2 {
+            for c in col / 3 * 3...col / 3 * 3 + 2 {
+                array.append(data[r][c])
+            }
+        }
+        
+        print("sameNon")
+        for cell in array { print("  \(cell.row),\(cell.col)", terminator: "") }
+        print("")
+        
+        return array
+    }
+    
+    func onChangeIsShowingReach(value: Bool) {
+        isShowingReach = value
+        calculateReach()
+    }
+    
+    func onChangeIsShowingErrors(value: Bool) {
+        isShowingErrors = value
+        calculateErrors()
     }
     
 }

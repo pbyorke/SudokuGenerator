@@ -7,11 +7,12 @@
 
 struct CellData {
     
-    var value: Int
     var row: Int
     var col: Int
+    var value: Int
     var open: Bool
     var valid: Bool
+    var reach: Bool
     
     init(_ row: Int, _ col: Int, _ value: Int) {
         self.row = row
@@ -19,6 +20,7 @@ struct CellData {
         self.value = value
         self.open = true
         self.valid = true
+        self.reach = false
     }
     
     func equals(_ search: CellData) -> Bool {
@@ -31,6 +33,15 @@ struct CellData {
             }
         }
         return false
+    }
+    
+    func dump() {
+        print("")
+        print("CellData")
+        print("  row   \(row)")
+        print("  col   \(col)")
+        print("  value \(value)")
+        print("  reach \(reach)")
     }
     
 }
