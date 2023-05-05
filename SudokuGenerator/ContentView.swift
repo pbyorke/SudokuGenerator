@@ -68,13 +68,6 @@ struct ContentView: View {
     private var shuffle: some View {
         VStack {
             HStack {
-                Spacer()
-                StyledText("Shuffle the numbers")
-                    .foregroundColor(.gray)
-                Spacer()
-            }
-            .padding(.bottom, 5)
-            HStack {
                 Button {
                     vm.shuffle()
                 } label: {
@@ -99,13 +92,6 @@ struct ContentView: View {
     
     private var exclude: some View {
         VStack {
-            HStack {
-                Spacer()
-                StyledText("Exclude some numbers")
-                    .foregroundColor(.gray)
-                Spacer()
-            }
-            .padding(.bottom, 5)
             HStack {
                 Button {
                     vm.exclude10()
@@ -150,13 +136,6 @@ struct ContentView: View {
     private var play: some View {
         VStack {
             HStack {
-                Spacer()
-                StyledText("Start Playing")
-                    .foregroundColor(.gray)
-                Spacer()
-            }
-            .padding(.bottom, 5)
-            HStack {
                 Button {
                     vm.lock()
                     vm.step = .playing
@@ -194,13 +173,6 @@ struct ContentView: View {
                 } label: {
                     StyledText("Redo")
                 }
-                Spacer()
-            }
-            .padding(.bottom, 5)
-            HStack {
-                Spacer()
-                StyledText("Start another game")
-                    .foregroundColor(.gray)
                 Spacer()
             }
             .padding(.bottom, 5)

@@ -23,7 +23,7 @@ struct Cell: View {
     var body: some View {
         Text(value == 0 ? " " : "\(value)")
             .frame(width: width, height: width)
-            .font(.system(size: 26))
+            .font(.system(size: 27))
             .background(
                 vm.chooseMyColor(self)
             )

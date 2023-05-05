@@ -99,8 +99,8 @@ class ViewModel: ObservableObject {
     private var running = false
     var isRunning: Bool { running }
     private var stack = Stack()
-    var canUndo: Bool { stack.canUndo }
-    var canRedo: Bool { stack.canRedo }
+    var canUndox: Bool { stack.canUndo }
+    var canRedox: Bool { stack.canRedo }
     
     func tapSource(_ value: Int) {
         if !isAllCorrect {
@@ -182,7 +182,7 @@ class ViewModel: ObservableObject {
         }
     }
     
-    func reset( ){
+    func reset(){
         data = originalData
         selectedRow = -3
         selectedCol = -3
@@ -281,8 +281,6 @@ class ViewModel: ObservableObject {
     }
     
     private func nonetsHaveErrors() -> Bool {
-        
-        
         var errorsFound = false
         for nonetRow in 0...2 {
             for nonetCol in 0...2 {
@@ -297,19 +295,6 @@ class ViewModel: ObservableObject {
             }
         }
         return errorsFound
-    }
-    
-    private func analyzeArray(_ array: [CellData]) -> Bool {
-        var thereAreErrors = false
-        for base in array {
-            for search in array {
-                if search.equals(base) {
-                    data[search.row][search.col].valid = false
-                    thereAreErrors = true
-                }
-            }
-        }
-        return thereAreErrors
     }
 
     private func calculateReach() {

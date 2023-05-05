@@ -22,14 +22,6 @@ struct Source: View {
     
     var body: some View {
             HStack(spacing: 0) {
-//                Button {
-//                    vm.undo()
-//                } label: {
-//                    HStack(spacing: 0) {
-//                        Image(systemName: "arrow.uturn.backward")
-//                    }
-//                    .frame(width: width, height: width)
-//                }
                 HStack(spacing: 0) {
                     cells[0]
                     cells[1]
@@ -41,14 +33,6 @@ struct Source: View {
                     cells[7]
                     cells[8]
                 }
-//                Button {
-//                    vm.redo()
-//                } label: {
-//                    HStack(spacing: 0) {
-//                        Image(systemName: "arrow.uturn.forward")
-//                    }
-//                    .frame(width: width, height: width)
-//                }
             }
         .overlay(
             RoundedRectangle(cornerRadius: 0)

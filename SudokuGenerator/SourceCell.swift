@@ -21,7 +21,7 @@ struct SourceCell: View {
     var body: some View {
         Text("\(value)")
             .frame(width: width, height: width)
-            .font(.system(size: 26))
+            .font(.system(size: 27))
             .background(vm.isShowingUsed ? vm.usedUpSource[value] >= 9 ? Color.lightRed : Color.white : Color.white)
             .overlay(
                 RoundedRectangle(cornerRadius: 0)
