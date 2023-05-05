@@ -14,121 +14,206 @@ struct ContentView: View {
     var board: Board
     var source: Source
     
-    @State private var disableShuffle = false
-    @State private var disableExclude = false
-    @State private var disableLock = false
-    @State private var isShowingReach = false
-    @State private var isShowingErrors = false
-
+    @State private var isShowingReach   = false
+    @State private var isShowingErrors  = false
+    @State private var showAlert        = false
+    
     init() {
         board = Board()
         source = Source()
     }
     
+    // MARK: - body
+    
     var body: some View {
         VStack {
+            HStack {
+                Spacer()
+                StyledText("Sudoku Generator")
+                    .foregroundColor(.gray)
+                Spacer()
+            }
+            .padding(.bottom)
+            .alert("Restart?", isPresented: $showAlert) {
+                Button {
+                    vm.reset()
+                    vm.step = .shuffle
+                } label: {
+                    Text("YES")
+                }
+                Button {
+                    showAlert = false
+                } label: {
+                    Text("NO")
+                }
+            }
             board
                 .padding(.bottom)
             if vm.isRunning {
                 source
                     .padding(.bottom)
             }
-            
-            
-            VStack {
-                HStack {
-                    Button {
-                        vm.shuffle()
-                    } label: {
-                        Text("shuffle")
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .padding()
-                            .foregroundColor(.white)
-                            .background(disableShuffle ? Color.lockedCell : Color.green)
-                    }
-                    .disabled(disableShuffle)
-                    Button {
-                        vm.reset()
-                        disableLock = false
-                        disableExclude = false
-                        disableShuffle = false
-                    } label: {
-                        Text("reset")
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .padding()
-                            .foregroundColor(.white)
-                            .background(Color.green)
-                    }
-//                    Button {
-//                        vm.solve()
-//                    } label: {
-//                        Text("solve")
-//                            .font(.caption)
-//                            .fontWeight(.bold)
-//                            .padding()
-//                            .foregroundColor(.white)
-//                            .background(Color.green)
-//                    }
-                }
-                .padding(.bottom)
-                HStack {
-                    Button {
-                        vm.exclude10()
-                    } label: {
-                        Text("exclude 10")
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .padding()
-                            .foregroundColor(.white)
-                            .background(disableExclude ? Color.lockedCell : Color.green)
-                    }
-                    .disabled(disableExclude)
-                    Button {
-                        vm.exclude1()
-                    } label: {
-                        Text("exclude 1")
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .padding()
-                            .foregroundColor(.white)
-                            .background(disableExclude ? Color.lockedCell : Color.green)
-                    }
-                    .disabled(disableExclude)
-                }
-                .padding(.bottom)
-                Divider()
-                Toggle("Show used numbers", isOn: $vm.isShowingUsed)
-                Toggle("Show reach", isOn: $isShowingReach)
-                    .onChange(of: isShowingReach) { value in
-                        vm.onChangeIsShowingReach(value: value)
-                    }
-                Toggle("Show errors", isOn: $isShowingErrors)
-                    .onChange(of: isShowingErrors) { value in
-                        vm.onChangeIsShowingErrors(value: value)
-                    }
-                    .padding(.bottom)
+            switch vm.step {
+            case .shuffle:  shuffle
+            case .exclude:  exclude
+            case .play:     play
+            case .playing:  playing
             }
-            Button {
-                vm.lock()
-                disableLock = true
-                disableExclude = true
-                disableShuffle = true
-            } label: {
-                Text("lock & run")
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .padding()
-                    .frame(width: UIScreen.main.bounds.width - 20)
-                    .foregroundColor(.white)
-                    .background(disableLock ? Color.lockedCell : Color.green)
-            }
-            .disabled(disableLock)
-
-            Spacer()
         }
-        .padding()
+        Spacer()
+    }
+    
+    // MARK: - shuffle
+    
+    private var shuffle: some View {
+        VStack {
+            HStack {
+                Spacer()
+                StyledText("Shuffle the numbers")
+                    .foregroundColor(.gray)
+                Spacer()
+            }
+            .padding(.bottom, 5)
+            HStack {
+                Button {
+                    vm.shuffle()
+                } label: {
+                    StyledText("Shuffle all the numbers")
+                }
+                Spacer()
+            }
+            .padding(.bottom, 5)
+            HStack {
+                Button {
+                    vm.step = .exclude
+                } label: {
+                    StyledText("Exclude Page →")
+                }
+                Spacer()
+            }
+        }
+        .padding(.horizontal)
+    }
+    
+    // MARK: - exclude
+    
+    private var exclude: some View {
+        VStack {
+            HStack {
+                Spacer()
+                StyledText("Exclude some numbers")
+                    .foregroundColor(.gray)
+                Spacer()
+            }
+            .padding(.bottom, 5)
+            HStack {
+                Button {
+                    vm.exclude10()
+                } label: {
+                    StyledText("Exclude 10 numbers")
+                }
+                Spacer()
+            }
+            .padding(.bottom, 5)
+            HStack {
+                Button {
+                    vm.exclude1()
+                } label: {
+                    StyledText("Exclude 1 number")
+                }
+                Spacer()
+            }
+            .padding(.bottom, 5)
+            HStack {
+                Button {
+                    vm.step = .play
+                } label: {
+                    StyledText("Play Page →")
+                }
+                Spacer()
+            }
+            .padding(.bottom, 5)
+            HStack {
+                Button {
+                    vm.step = .shuffle
+                } label: {
+                    StyledText("Shuffle Page ←")
+                }
+                Spacer()
+            }
+        }
+        .padding(.horizontal)
+    }
+    
+    // MARK - play
+    
+    private var play: some View {
+        VStack {
+            HStack {
+                Spacer()
+                StyledText("Start Playing")
+                    .foregroundColor(.gray)
+                Spacer()
+            }
+            .padding(.bottom, 5)
+            HStack {
+                Button {
+                    vm.lock()
+                    vm.step = .playing
+                } label: {
+                    StyledText("Start Play")
+                }
+                Spacer()
+            }
+            .padding(.bottom, 5)
+            HStack {
+                Button {
+                    vm.step = .exclude
+                } label: {
+                    StyledText("Exclude Page ←")
+                }
+                Spacer()
+            }
+        }
+        .padding(.horizontal)
+    }
+    
+    // MARK: - playing
+    
+    private var playing: some View {
+        VStack {
+            HStack {
+                Button {
+                    vm.undo()
+                } label: {
+                    StyledText("Undo")
+                }
+                .padding(.trailing, 5)
+                Button {
+                    vm.redo()
+                } label: {
+                    StyledText("Redo")
+                }
+                Spacer()
+            }
+            .padding(.bottom, 5)
+            HStack {
+                Spacer()
+                StyledText("Start another game")
+                    .foregroundColor(.gray)
+                Spacer()
+            }
+            .padding(.bottom, 5)
+            HStack {
+                Button {
+                    showAlert = true
+                } label: {
+                    StyledText("Restart")
+                }
+                Spacer()
+            }
+        }
+        .padding(.horizontal)
     }
     
 }

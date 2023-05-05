@@ -12,7 +12,7 @@ struct Source: View {
     @EnvironmentObject private var vm: ViewModel
     
     private var cells = [SourceCell]()
-    private var width: CGFloat { (UIScreen.main.bounds.width - 20) / 11 }
+    private var width: CGFloat { (UIScreen.main.bounds.width - 20) / 9 }
 
     init() {
         for col in 1...9 {
@@ -22,14 +22,14 @@ struct Source: View {
     
     var body: some View {
             HStack(spacing: 0) {
-                Button {
-                    vm.undo()
-                } label: {
-                    HStack(spacing: 0) {
-                        Image(systemName: "arrow.uturn.backward")
-                    }
-                    .frame(width: width, height: width)
-                }
+//                Button {
+//                    vm.undo()
+//                } label: {
+//                    HStack(spacing: 0) {
+//                        Image(systemName: "arrow.uturn.backward")
+//                    }
+//                    .frame(width: width, height: width)
+//                }
                 HStack(spacing: 0) {
                     cells[0]
                     cells[1]
@@ -41,14 +41,14 @@ struct Source: View {
                     cells[7]
                     cells[8]
                 }
-                Button {
-                    vm.redo()
-                } label: {
-                    HStack(spacing: 0) {
-                        Image(systemName: "arrow.uturn.forward")
-                    }
-                    .frame(width: width, height: width)
-                }
+//                Button {
+//                    vm.redo()
+//                } label: {
+//                    HStack(spacing: 0) {
+//                        Image(systemName: "arrow.uturn.forward")
+//                    }
+//                    .frame(width: width, height: width)
+//                }
             }
         .overlay(
             RoundedRectangle(cornerRadius: 0)

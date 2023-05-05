@@ -13,6 +13,8 @@
 
 import SwiftUI
 
+enum PlayStep { case shuffle, exclude, play, playing }
+
 class ViewModel: ObservableObject {
     
     static var shared = ViewModel()
@@ -24,6 +26,7 @@ class ViewModel: ObservableObject {
     @Published var isShowingUsed = false
     @Published var isShowingReach = false
     @Published var isShowingErrors = false
+    @Published var step = PlayStep.shuffle
     
     @Published var data = [
         [CellData(0,0,1),CellData(0,1,2),CellData(0,2,3),
@@ -181,11 +184,6 @@ class ViewModel: ObservableObject {
     
     func reset( ){
         data = originalData
-        for row in 0..<9 {
-            for col in 0..<9 {
-                data[row][col].open = true
-            }
-        }
         selectedRow = -3
         selectedCol = -3
         isAllCorrect = false
@@ -204,7 +202,7 @@ class ViewModel: ObservableObject {
         lookForUsedUpSource()
         running = true
     }
-    
+
     private func isEverythingFilled() -> Bool {
         for row in 0...8 {
             for col in 0...8 {
@@ -240,20 +238,31 @@ class ViewModel: ObservableObject {
         if rowsHaveErrors() {
             noErrorsFound = false
         }
-        if blocksHaveErrors() {
+        if nonetsHaveErrors() {
             noErrorsFound = false
         }
         return noErrorsFound
     }
     
+    private func same(array: [CellData]) -> Bool {
+        var same = false
+        for x in 0...7 {
+            for y in x + 1...8 {
+                if array[x].value == array[y].value {
+                    data[array[x].row][array[x].col].valid = false
+                    data[array[y].row][array[y].col].valid = false
+                    same = true
+                }
+            }
+        }
+        return same
+    }
+    
     private func columnsHaveErrors() -> Bool {
         var errorsFound = false
-        for row in 0...8 {
-            var array = [CellData]()
-            for col in 0...8 {
-                array.append(data[row][col])
-            }
-            if analyzeArray(array) {
+        for col in 0...8 {
+            let rows = sameCol(col: col)
+            if same(array: rows) {
                 errorsFound = true
             }
         }
@@ -262,31 +271,28 @@ class ViewModel: ObservableObject {
     
     private func rowsHaveErrors() -> Bool {
         var errorsFound = false
-        for col in 0...8 {
-            var array = [CellData]()
-            for row in 0...8 {
-                array.append(data[row][col])
-            }
-            if analyzeArray(array) {
+        for row in 0...8 {
+            let cols = sameRow(row: row)
+            if same(array: cols) {
                 errorsFound = true
             }
         }
         return errorsFound
     }
     
-    private func blocksHaveErrors() -> Bool {
-        var array = [CellData]()
+    private func nonetsHaveErrors() -> Bool {
+        
+        
         var errorsFound = false
-        for blockRow in 0...2 {
-            for blockCol in 0...2 {
-                array = [CellData]()
-                for row in blockRow * 3...blockRow * 3 + 2 {
-                    for col in blockCol * 3...blockCol * 3 + 2 {
-                        array.append(data[row][col])
+        for nonetRow in 0...2 {
+            for nonetCol in 0...2 {
+                for row in nonetRow * 3...nonetRow * 3 + 2 {
+                    for col in nonetCol * 3...nonetCol * 3 + 2 {
+                        let nons = sameNon(row: row, col: col)
+                        if same(array: nons) {
+                            errorsFound = true
+                        }
                     }
-                }
-                if analyzeArray(array) {
-                    errorsFound = true
                 }
             }
         }
@@ -305,25 +311,7 @@ class ViewModel: ObservableObject {
         }
         return thereAreErrors
     }
-    
-//    private func sameRowx(_ cell: CellData) -> Bool {
-//        if cell.row == selectedRow && cell.col == selectedCol { return false }
-//        if !cell.open { return false}
-//        return cell.row == selectedRow
-//    }
-//
-//    private func sameColx(_ cell: CellData) -> Bool {
-//        if cell.row == selectedRow && cell.col == selectedCol { return false }
-//        if !cell.open { return false}
-//        return cell.col == selectedCol
-//    }
-//
-//    private func sameBlockx(_ cell: CellData) -> Bool {
-//        if cell.row == selectedRow && cell.col == selectedCol { return false }
-//        if !cell.open { return false}
-//        return (cell.row / 3) == (selectedRow / 3) && (cell.col / 3) == (selectedCol / 3)
-//    }
-    
+
     private func calculateReach() {
         for row in 0..<9 {
             for col in 0..<9 {
@@ -421,12 +409,23 @@ class ViewModel: ObservableObject {
     func undo() {
         if let play = stack.undo() {
             data[play.row][play.col].value = play.oldValue
+            calculateReach()
+            calculateErrors()
         }
     }
     
     func redo() {
         if let play = stack.redo() {
             data[play.row][play.col].value = play.newValue
+            if isEverythingFilled() {
+                selectedRow = -3
+                selectedCol = -3
+                if andThereAreNoErrors() {
+                    isAllCorrect = true
+                }
+            }
+            calculateReach()
+            calculateErrors()
         }
     }
     
@@ -446,11 +445,6 @@ class ViewModel: ObservableObject {
         for col in 0..<9 {
             array.append(data[row][col])
         }
-        
-        print("sameRow")
-        for cell in array { print("  \(cell.row),\(cell.col)", terminator: "") }
-        print("")
-        
         return array
     }
     
@@ -459,11 +453,6 @@ class ViewModel: ObservableObject {
         for row in 0..<9 {
             array.append(data[row][col])
         }
-        
-        print("sameCol")
-        for cell in array { print("  \(cell.row),\(cell.col)", terminator: "") }
-        print("")
-        
         return array
     }
     
@@ -474,11 +463,6 @@ class ViewModel: ObservableObject {
                 array.append(data[r][c])
             }
         }
-        
-        print("sameNon")
-        for cell in array { print("  \(cell.row),\(cell.col)", terminator: "") }
-        print("")
-        
         return array
     }
     

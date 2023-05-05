@@ -16,6 +16,7 @@
 		C10A0D0829D88E0600CB0952 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10A0D0729D88E0600CB0952 /* Board.swift */; };
 		C10BC4BD29E7504800A093EB /* CellData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10BC4BC29E7504800A093EB /* CellData.swift */; };
 		C16EB9CE29DF80A500AFFED8 /* BlockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16EB9CD29DF80A500AFFED8 /* BlockExtension.swift */; };
+		C176A8B02A047B85001A29D6 /* StyledText.swift in Sources */ = {isa = PBXBuildFile; fileRef = C176A8AF2A047B85001A29D6 /* StyledText.swift */; };
 		C18FC48729FC6FAA00D54336 /* Sudoku.swift in Sources */ = {isa = PBXBuildFile; fileRef = C18FC48629FC6FAA00D54336 /* Sudoku.swift */; };
 		C19B15BD29F87C2600D885C0 /* xSudoku.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19B15BC29F87C2600D885C0 /* xSudoku.swift */; };
 		C19B15BF29F9A71300D885C0 /* xNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19B15BE29F9A71300D885C0 /* xNode.swift */; };
@@ -44,6 +45,7 @@
 		C10A0D0729D88E0600CB0952 /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 		C10BC4BC29E7504800A093EB /* CellData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellData.swift; sourceTree = "<group>"; };
 		C16EB9CD29DF80A500AFFED8 /* BlockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockExtension.swift; sourceTree = "<group>"; };
+		C176A8AF2A047B85001A29D6 /* StyledText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyledText.swift; sourceTree = "<group>"; };
 		C18FC48629FC6FAA00D54336 /* Sudoku.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sudoku.swift; sourceTree = "<group>"; };
 		C19B15BC29F87C2600D885C0 /* xSudoku.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = xSudoku.swift; sourceTree = "<group>"; };
 		C19B15BE29F9A71300D885C0 /* xNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = xNode.swift; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 				C1C6823729F3A3C900146D2E /* Play.swift */,
 				C1023C0129E1226F000B2E89 /* Shuffle.swift */,
 				C1C6823929F3A41300146D2E /* Stack.swift */,
+				C176A8AF2A047B85001A29D6 /* StyledText.swift */,
 				C19B15BB29F87BF900D885C0 /* Sudoku */,
 			);
 			name = Helpers;
@@ -269,6 +272,7 @@
 				C19B15BD29F87C2600D885C0 /* xSudoku.swift in Sources */,
 				C1C6823A29F3A41300146D2E /* Stack.swift in Sources */,
 				C10A0CFE29D88A2500CB0952 /* Cell.swift in Sources */,
+				C176A8B02A047B85001A29D6 /* StyledText.swift in Sources */,
 				C1023BFB29E0D258000B2E89 /* ColorExtension.swift in Sources */,
 				C1C6823829F3A3C900146D2E /* Play.swift in Sources */,
 			);
