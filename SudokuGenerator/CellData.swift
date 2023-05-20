@@ -10,6 +10,7 @@ struct CellData {
     var row: Int
     var col: Int
     var value: Int
+    var notes: [[Int]]
     var open: Bool
     var valid: Bool
     var reach: Bool
@@ -18,6 +19,7 @@ struct CellData {
         self.row = row
         self.col = col
         self.value = value
+        self.notes = [[Int]](repeating: [Int](repeating: 0, count: 3), count: 3)
         self.open = true
         self.valid = true
         self.reach = false
@@ -41,7 +43,10 @@ struct CellData {
         print("  row   \(row)")
         print("  col   \(col)")
         print("  value \(value)")
-        print("  reach \(reach)")
+        print("  notes \(notes)")
+        print("  open  \(open  ? "true" : "false")")
+        print("  valid \(valid ? "true" : "false")")
+        print("  reach \(reach ? "true" : "false")")
     }
     
 }

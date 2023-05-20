@@ -73,7 +73,6 @@
 		C1023C0029E1220F000B2E89 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				C10BC4BC29E7504800A093EB /* CellData.swift */,
 				C1C6823729F3A3C900146D2E /* Play.swift */,
 				C1023C0129E1226F000B2E89 /* Shuffle.swift */,
 				C1C6823929F3A41300146D2E /* Stack.swift */,
@@ -124,6 +123,14 @@
 			path = Images;
 			sourceTree = "<group>";
 		};
+		C196D08C2A07827C00250D56 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C10BC4BC29E7504800A093EB /* CellData.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
 		C19B15BB29F87BF900D885C0 /* Sudoku */ = {
 			isa = PBXGroup;
 			children = (
@@ -155,6 +162,7 @@
 				C1CD3D0229DCE53D00C1FF96 /* Extensions */,
 				C1023C0029E1220F000B2E89 /* Helpers */,
 				C10A0CFF29D88B7000CB0952 /* Infrastructure */,
+				C196D08C2A07827C00250D56 /* Models */,
 				C10A0D0429D88D9B00CB0952 /* ViewModels */,
 				C10A0D0129D88B9A00CB0952 /* Views */,
 			);
@@ -397,11 +405,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"SudokuGenerator/Preview Content\"";
 				DEVELOPMENT_TEAM = GA4L9A4FGA;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Sudoku Generator";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.puzzle-games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -413,9 +423,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.storkebrothers.SudokuGenerator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -425,11 +438,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"SudokuGenerator/Preview Content\"";
 				DEVELOPMENT_TEAM = GA4L9A4FGA;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Sudoku Generator";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.puzzle-games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -441,9 +456,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.storkebrothers.SudokuGenerator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

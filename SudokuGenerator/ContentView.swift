@@ -57,7 +57,6 @@ struct ContentView: View {
             case .shuffle:  shuffle
             case .exclude:  exclude
             case .play:     play
-            case .playing:  playing
             }
         }
         Spacer()
@@ -67,125 +66,104 @@ struct ContentView: View {
     
     private var shuffle: some View {
         VStack {
-            HStack {
-                Button {
-                    vm.shuffle()
-                } label: {
-                    StyledText("Shuffle all the numbers")
-                }
-                Spacer()
+            VStack {
+                StyledText("Shuffle Page")
+                    .foregroundColor(.teal)
             }
-            .padding(.bottom, 5)
-            HStack {
-                Button {
-                    vm.step = .exclude
-                } label: {
-                    StyledText("Exclude Page →")
+            .padding(.horizontal)
+            ZStack {
+                RoundedRectangle(cornerRadius: 5)
+                    .fill(.white)
+                    .shadow(color: Color.teal.opacity(0.2), radius: 2, x: -2, y: 2)
+                    .frame(height: 80)
+                VStack {
+                    Text("The first step is to shuffle the numbers")
+                        .multilineTextAlignment(.center)
+                    Text("You can do this as many times as you want")
+                    Button("Shuffle") {vm.shuffle()}
                 }
-                Spacer()
             }
+            .padding(.horizontal)
+            ZStack {
+                RoundedRectangle(cornerRadius: 5)
+                    .fill(.white)
+                    .shadow(color: Color.teal.opacity(0.2), radius: 2, x: -2, y: 2)
+                    .frame(height: 60)
+                VStack {
+                    Text("When you are done shuffling, go to the")
+                        .multilineTextAlignment(.center)
+                    Button("Exclusion page") {vm.step = .exclude}
+                }
+            }
+            .padding(.horizontal)
         }
-        .padding(.horizontal)
     }
-    
+
     // MARK: - exclude
     
     private var exclude: some View {
         VStack {
-            HStack {
-                Button {
-                    vm.exclude10()
-                } label: {
-                    StyledText("Exclude 10 numbers")
-                }
-                Spacer()
+            VStack {
+                StyledText("Exclusion Page")
+                    .foregroundColor(.teal)
             }
-            .padding(.bottom, 5)
-            HStack {
-                Button {
-                    vm.exclude1()
-                } label: {
-                    StyledText("Exclude 1 number")
+            .padding(.horizontal)
+            ZStack {
+                RoundedRectangle(cornerRadius: 5)
+                    .fill(.white)
+                    .shadow(color: Color.teal.opacity(0.2), radius: 2, x: -2, y: 2)
+                    .frame(height: 80)
+                VStack {
+                    Text("You can make your puzzle as hard as you want")
+                        .multilineTextAlignment(.center)
+                    Button("Exclude 10 numbers") {vm.exclude10()}
+                    Button("Exclude 1 number") {vm.exclude1()}
                 }
-                Spacer()
             }
-            .padding(.bottom, 5)
-            HStack {
-                Button {
-                    vm.step = .play
-                } label: {
-                    StyledText("Play Page →")
+            .padding(.horizontal)
+            ZStack {
+                RoundedRectangle(cornerRadius: 5)
+                    .fill(.white)
+                    .shadow(color: Color.teal.opacity(0.2), radius: 2, x: -2, y: 2)
+                    .frame(height: 80)
+                VStack {
+                    Text("When done")
+                        .multilineTextAlignment(.center)
+                    Button("Lock board and play") {
+                        vm.step = .play
+                        vm.lock()
+                    }
+                    .disabled(!vm.atLeastOneExclusion)
+                    Button("Go back") {vm.step = .shuffle}
                 }
-                Spacer()
             }
-            .padding(.bottom, 5)
-            HStack {
-                Button {
-                    vm.step = .shuffle
-                } label: {
-                    StyledText("Shuffle Page ←")
-                }
-                Spacer()
-            }
+            .padding(.horizontal)
         }
-        .padding(.horizontal)
     }
-    
-    // MARK - play
+
+    // MARK: - playing
     
     private var play: some View {
         VStack {
             HStack {
-                Button {
-                    vm.lock()
-                    vm.step = .playing
-                } label: {
-                    StyledText("Start Play")
-                }
-                Spacer()
+                Button("undo") {vm.undo()}
+                Button("redo") {vm.redo()}
             }
-            .padding(.bottom, 5)
-            HStack {
-                Button {
-                    vm.step = .exclude
-                } label: {
-                    StyledText("Exclude Page ←")
-                }
-                Spacer()
+            .padding(8)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(lineWidth: 1)
+            )
+            VStack {
+                Text("When you are done, restart")
+                Button("Restart") {showAlert = true}
             }
+            .padding(8)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(lineWidth: 1)
+            )
         }
-        .padding(.horizontal)
-    }
-    
-    // MARK: - playing
-    
-    private var playing: some View {
-        VStack {
-            HStack {
-                Button {
-                    vm.undo()
-                } label: {
-                    StyledText("Undo")
-                }
-                .padding(.trailing, 5)
-                Button {
-                    vm.redo()
-                } label: {
-                    StyledText("Redo")
-                }
-                Spacer()
-            }
-            .padding(.bottom, 5)
-            HStack {
-                Button {
-                    showAlert = true
-                } label: {
-                    StyledText("Restart")
-                }
-                Spacer()
-            }
-        }
-        .padding(.horizontal)
     }
     
 }
