@@ -13,7 +13,7 @@ struct Cell: View {
 
     let row, col: Int
     var value: Int { vm.data[row][col].value }
-    var width: CGFloat { (UIScreen.main.bounds.width - 20) / 9 }
+    var width: CGFloat { (UIScreen.main.bounds.width - (UIDevice.isIPad ? 120 : 20)) / 9 }
 
     init(row: Int, col: Int) {
         self.row = row
@@ -23,7 +23,7 @@ struct Cell: View {
     var body: some View {
         Text(value == 0 ? " " : "\(value)")
             .frame(width: width, height: width)
-            .font(.system(size: 27))
+            .font(.system(size: UIDevice.isIPad ? 50 : 27))
             .background(
                 vm.chooseMyColor(self)
             )

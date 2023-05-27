@@ -13,8 +13,6 @@
 
 import SwiftUI
 
-enum PlayStep { case shuffle, exclude, play }
-
 class ViewModel: ObservableObject {
     
     static var shared = ViewModel()
@@ -64,7 +62,7 @@ class ViewModel: ObservableObject {
          CellData(8,6,6),CellData(8,7,4),CellData(8,8,5)],
     ]
     
-    var originalData = [
+    private var originalData = [
         [CellData(0,0,1),CellData(0,1,2),CellData(0,2,3),
          CellData(0,3,4),CellData(0,4,5),CellData(0,5,6),
          CellData(0,6,7),CellData(0,7,8),CellData(0,8,9)],
@@ -98,59 +96,51 @@ class ViewModel: ObservableObject {
          CellData(8,6,6),CellData(8,7,4),CellData(8,8,5)],
     ]
     
-    private var running = false
-    var isRunning: Bool { running }
+    var showSource: Bool { step == .play || step == .error}
     private var stack = Stack()
-    
+    var canUndo: Bool { stack.canUndo }
+    var canRedo: Bool { stack.canRedo }
+    private var noSelection: Bool { selectedRow == -3 || selectedCol == -3 }
+
     func tapSource(_ value: Int) {
-        if !isAllCorrect {
-            if selectedRow >= 0 {
-                if data[selectedRow][selectedCol].value == value {
-                    stack.put(Play(row: selectedRow, col: selectedCol, oldValue: data[selectedRow][selectedCol].value, newValue: 0))
-                    data[selectedRow][selectedCol].value = 0
-                    lookForUsedUpSource()
-                } else {
-                    stack.put(Play(row: selectedRow, col: selectedCol, oldValue: data[selectedRow][selectedCol].value, newValue: value))
-                    data[selectedRow][selectedCol].value = value
-                    lookForUsedUpSource()
-                }
-            }
-            if isEverythingFilled() {
-                selectedRow = -3
-                selectedCol = -3
-                if andThereAreNoErrors() {
-                    isAllCorrect = true
-                }
+        if !noSelection {
+            if data[selectedRow][selectedCol].value == value {
+                stack.push(Play(data[selectedRow][selectedCol], 0))
+                data[selectedRow][selectedCol].value = 0
+            } else {
+                stack.push(Play(data[selectedRow][selectedCol], value))
+                data[selectedRow][selectedCol].value = value
+                checkForFilled()
             }
         }
     }
     
-    private func lookForUsedUpSource() {
-        for number in 0...9 { usedUpSource[number] = 0 }
-        for row in 0...8 {
-            for col in 0...8 {
-                usedUpSource[data[row][col].value] += 1
+    private func checkForFilled() {
+        if isEverythingFilled() {
+            selectedRow = -3
+            selectedCol = -3
+            if andThereAreNoErrors() {
+                isAllCorrect = true
+                stack.reset()
+                if step != .exclude {
+                    step = .recap
+                }
+            } else {
+                step = .error
             }
+        } else {
+            step = .play
         }
     }
     
     func tapCell(_ cell: Cell) {
-        if !isAllCorrect {
-            if isRunning {
-                if cell.row == selectedRow && cell.col == selectedCol {
-                    selectedRow = -3
-                    selectedCol = -3
-                    calculateReach()
-                    calculateErrors()
-                } else {
-                    let cellData = data[cell.row][cell.col]
-                    if cellData.open  || !cellData.valid {
-                        selectedRow = cell.row
-                        selectedCol = cell.col
-                        calculateReach()
-                        calculateErrors()
-                    }
-                }
+        if step == .play || step == .error {
+            if cell.row == selectedRow && cell.col == selectedCol {
+                selectedRow = -3
+                selectedCol = -3
+            } else {
+                selectedRow = cell.row
+                selectedCol = cell.col
             }
         }
     }
@@ -164,7 +154,9 @@ class ViewModel: ObservableObject {
             let row = Int.random(in: 0..<9)
             let col = Int.random(in: 0..<9)
             if data[row][col].value != 0 {
+                stack.push(Play(data[row][col], 0))
                 data[row][col].value = 0
+                data[row][col].clue = false
                 atLeastOneExclusion = true
                 return
             }
@@ -173,11 +165,13 @@ class ViewModel: ObservableObject {
     
     func exclude10() {
         var count = 0
-        while count < 11 {
+        while count < 10 {
             let row = Int.random(in: 0..<9)
             let col = Int.random(in: 0..<9)
             if data[row][col].value != 0 {
+                stack.push(Play(data[row][col], 0))
                 data[row][col].value = 0
+                data[row][col].clue = false
                 count += 1
             }
         }
@@ -189,21 +183,14 @@ class ViewModel: ObservableObject {
         selectedRow = -3
         selectedCol = -3
         isAllCorrect = false
-        running = false
+        step = .shuffle
         atLeastOneExclusion = false
         stack.reset()
     }
     
     func lock() {
-        for row in 0..<9 {
-            for col in 0..<9 {
-                if data[row][col].value != 0 {
-                    data[row][col].open = false
-                }
-            }
-        }
-        lookForUsedUpSource()
-        running = true
+        step = .play
+        stack.reset()
     }
 
     private func isEverythingFilled() -> Bool {
@@ -230,7 +217,7 @@ class ViewModel: ObservableObject {
 
     private func andThereAreNoErrors() -> Bool {
         var thereAreNoErrors = true
-        for row in 0..<9 { for col in 0..<9 { data[row][col].valid = true }  }
+        for row in 0..<9 { for col in 0..<9 { data[row][col].error = false }  }
         for row in 0..<9 {
             let array = sameRow(row)
             if dups(array) { thereAreNoErrors = false }
@@ -247,18 +234,13 @@ class ViewModel: ObservableObject {
     }
 
     private func dups(_ array: [CellData]) -> Bool {
-//        for index in 0..<9 {
-//            let cell = array[index]
-//        }
         var thereAreDups = false
         for x in 0..<array.count - 1 {
             for y in x + 1..<array.count {
                 if array[x].value == array[y].value {
                     if array[x].value != 0 {
-                        let cellx = array[x]
-                        let celly = array[y]
-                        data[cellx.row][cellx.col].valid = false
-                        data[celly.row][celly.col].valid = false
+                        data[array[x].row][array[x].col].error = true
+                        data[array[y].row][array[y].col].error = true
                         thereAreDups = true
                     }
                 }
@@ -267,171 +249,50 @@ class ViewModel: ObservableObject {
         return thereAreDups
     }
 
-    private func calculateReach() {
-        for row in 0..<9 {
-            for col in 0..<9 {
-                data[row][col].reach = false
-            }
-        }
-        if isShowingReach {
-            if selectedRow != -3 {
-                let rows = sameRow(selectedRow)
-                for row in rows {
-                    if row.col != selectedCol {
-                        if data[row.row][row.col].value == 0 {
-                            data[row.row][row.col].reach = true
-                        }
-                    }
-                }
-                let cols = sameCol(selectedCol)
-                for col in cols {
-                    if col.row != selectedRow {
-                        if data[col.row][col.col].value == 0 {
-                            data[col.row][col.col].reach = true
-                        }
-                    }
-                }
-////                let nons = sameNon(row: selectedRow, col: selectedCol)
-////                for non in nons {
-////                    if non.row != selectedRow || non.col != selectedCol {
-////                        if data[non.row][non.col].value == 0 {
-////                            data[non.row][non.col].reach = true
-////                        }
-////                    }
-////                }
-            }
-        }
-    }
-    
-    private func calculateErrors() {
-        for row in 0..<9 {
-            for col in 0..<9 {
-                data[row][col].valid = true
-            }
-        }
-        if isShowingErrors {
-            if selectedRow != -3 {
-                let rows = sameRow(selectedRow)
-                for row in rows {
-                    if row.col != selectedCol {
-                        if data[row.row][row.col].value == 0 {
-                            data[row.row][row.col].valid = false
-                        }
-                    }
-                }
-                let cols = sameCol(selectedCol)
-                for col in cols {
-                    if col.row != selectedRow {
-                        if data[col.row][col.col].value == 0 {
-                            data[col.row][col.col].valid = false
-                        }
-                    }
-                }
-////                let nons = sameNon(row: selectedRow, col: selectedCol)
-////                for non in nons {
-////                    if non.row != selectedRow || non.col != selectedCol {
-////                        if data[non.row][non.col].value == 0 {
-////                            data[non.row][non.col].valid = false
-////                        }
-////                    }
-////                }
-            }
-        }
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
     func chooseMyColor(_ cell: Cell) -> Color {
-        let cellData = data[cell.row][cell.col]
-        if isAllCorrect {
-            if !data[cell.row][cell.col].open {
+        switch step {
+        case .play:
+            if data[cell.row][cell.col].clue { return .lockedCell }
+            if noSelection {
+                return .white
+            }
+            return cell.row == selectedRow && cell.col == selectedCol ? .realYellow : .white
+        case .exclude: return data[cell.row][cell.col].clue ? .white : .lightYellow
+        case .recap:
+            if data[cell.row][cell.col].clue {
                 return .lockGreen
             } else {
                 return .unlockedGreen
             }
-        }
-        if data[cell.row][cell.col].reach {
-            return .lightYellow
-        }
-        if cell.row == selectedRow && cell.col == selectedCol {
-            if !data[cell.row][cell.col].valid {
-                return .yellow
+        case .shuffle: break
+        case .error:
+            if data[cell.row][cell.col].error {
+                if data[cell.row][cell.col].clue {
+                    return .lightRed
+                } else {
+                    return .realRed
+                }
             } else {
-                return .realYellow
+                return .white
             }
-        }
-        return cellData.valid ? cellData.open ? .white : .lockedCell : .red
-    }
-    
-    
-    
-    
-//    private func everythingIsFilled() -> Bool {
-//        for row in 0..<9 {
-//            for col in 0..<9 {
-//                if data[row][col].value == 0 {
-//                    return false
-//                }
-//            }
-//        }
-//        return true
-//    }
-    
-    
-    
-    func chooseMyColorx(_ cell: Cell) -> Color {
-        let cellData = data[cell.row][cell.col]
-        if step != .play { return .white } // until we're playing, it's always white
-        if isEverythingFilled() {
-            
-            
         }
         return .white
     }
-    
-    
-    
-    
+
     func undo() {
         if let play = stack.undo() {
-            data[play.row][play.col].value = play.oldValue
-            calculateReach()
-            calculateErrors()
+            data[play.oldCell.row][play.oldCell.col] = play.oldCell
+            checkForFilled()
         }
     }
     
     func redo() {
         if let play = stack.redo() {
-            data[play.row][play.col].value = play.newValue
-            if isEverythingFilled() {
-                selectedRow = -3
-                selectedCol = -3
-                if andThereAreNoErrors() {
-                    isAllCorrect = true
-                }
-            }
-            calculateReach()
-            calculateErrors()
+            data[play.newCell.row][play.newCell.col] = play.newCell
+            checkForFilled()
         }
     }
-    
-    func solve() {
-        var grid = [[Int]](repeating: [Int](repeating: 0, count: 9), count: 9)
-        for row in 0..<9 {
-            for col in 0..<9 {
-                grid[row][col] = data[row][col].value
-            }
-        }
-        let solver = Sudoku.AlgorithmXSolver(size: 3, grid: grid)
-        solver.run(grid)
-    }
-    
+
     private func sameRow(_ row: Int) -> [CellData] {
         var array = [CellData]()
         for col in 0..<9 {
@@ -460,14 +321,8 @@ class ViewModel: ObservableObject {
         return array
     }
 
-    func onChangeIsShowingReach(value: Bool) {
-        isShowingReach = value
-        calculateReach()
-    }
-    
     func onChangeIsShowingErrors(value: Bool) {
         isShowingErrors = value
-        calculateErrors()
     }
     
 }

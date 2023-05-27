@@ -7,22 +7,26 @@
 
 struct CellData {
     
-    var row: Int
-    var col: Int
-    var value: Int
-    var notes: [[Int]]
-    var open: Bool
-    var valid: Bool
-    var reach: Bool
-    
+    var row:    Int
+    var col:    Int
+    var value:  Int
+    var clue:   Bool
+    var error:  Bool
+
     init(_ row: Int, _ col: Int, _ value: Int) {
-        self.row = row
-        self.col = col
-        self.value = value
-        self.notes = [[Int]](repeating: [Int](repeating: 0, count: 3), count: 3)
-        self.open = true
-        self.valid = true
-        self.reach = false
+        self.row =      row
+        self.col =      col
+        self.value =    value
+        self.clue =     value != 0
+        self.error =    false
+    }
+    
+    init(_ cell: CellData, _ newValue: Int) {
+        row =   cell.row
+        col =   cell.col
+        value = newValue
+        clue =  cell.clue
+        error = cell.error
     }
     
     func equals(_ search: CellData) -> Bool {
@@ -38,15 +42,7 @@ struct CellData {
     }
     
     func dump() {
-        print("")
-        print("CellData")
-        print("  row   \(row)")
-        print("  col   \(col)")
-        print("  value \(value)")
-        print("  notes \(notes)")
-        print("  open  \(open  ? "true" : "false")")
-        print("  valid \(valid ? "true" : "false")")
-        print("  reach \(reach ? "true" : "false")")
+        print("CellData row \(row) col \(col) value \(value) clue \(clue ? "true " : "false") error \(error ? "true " : "false")")
     }
     
 }

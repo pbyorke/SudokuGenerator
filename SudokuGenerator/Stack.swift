@@ -12,12 +12,8 @@ class Stack {
     
     var canUndo: Bool { done.count > 0 }
     var canRedo: Bool { undone.count > 0 }
-    
-    func get() -> Play? {
-        done.first
-    }
-    
-    func put(_ play: Play) {
+
+    func push(_ play: Play) {
         done.insert(play, at: 0)
         undone = [Play]()
     }
@@ -46,18 +42,18 @@ class Stack {
         done = [Play]()
         undone = [Play]()
     }
-    
-    func dump() {
-        print("* * *  ")
-        print("* * *  Stack.dump()")
-        print("* * *    done")
+
+    func dump(_ title: String = "") {
+        print("* * *  Stack.dump() \(title)")
+        print("* * *    done stack")
         for play in done {
-            print("* * *      \(play.row),\(play.col),\(play.oldValue),\(play.newValue)")
+            play.dump()
         }
-        print("* * *    undone")
+        print("* * *    undone stack")
         for play in undone {
-            print("* * *      \(play.row),\(play.col),\(play.oldValue),\(play.newValue)")
+            play.dump()
         }
+        print("")
     }
     
 }
