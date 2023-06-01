@@ -7,9 +7,8 @@
 
 class Stack {
     
-    private var done = [Play]()
-    private var undone = [Play]()
-    
+    var done = [Play]()
+    var undone = [Play]()    
     var canUndo: Bool { done.count > 0 }
     var canRedo: Bool { undone.count > 0 }
 
@@ -43,17 +42,4 @@ class Stack {
         undone = [Play]()
     }
 
-    func dump(_ title: String = "") {
-        print("* * *  Stack.dump() \(title)")
-        print("* * *    done stack")
-        for play in done {
-            play.dump()
-        }
-        print("* * *    undone stack")
-        for play in undone {
-            play.dump()
-        }
-        print("")
-    }
-    
 }

@@ -29,17 +29,11 @@ struct ContentView: View {
                 .foregroundColor(.gray)
                 .padding(.bottom)
                 .alert("Restart?", isPresented: $showAlert) {
-                    Button {
+                    Action("YES") {
                         vm.reset()
                         vm.step = .shuffle
-                    } label: {
-                        VarText("YES")
                     }
-                    Button {
-                        showAlert = false
-                    } label: {
-                        VarText("NO")
-                    }
+                    Action("NO") { showAlert = false }
                 }
             board
                 .padding(.bottom)
@@ -48,11 +42,11 @@ struct ContentView: View {
                     .padding(.bottom)
             }
             switch vm.step {
-            case .shuffle:  shuffle
-            case .exclude:  exclude
-            case .play:     play
-            case .recap:    recap
-            case .error:    error
+            case .shuffle:  shufflePage
+            case .exclude:  excludePage
+            case .play:     playPage
+            case .recap:    recapPage
+            case .error:    errorPage
             }
         }
         Spacer()
@@ -72,49 +66,32 @@ struct ContentView: View {
 //        }
     }
     
-    // MARK: - shuffle
+    // MARK: - shufflePage
     
-    private var shuffle: some View {
+    private var shufflePage: some View {
         VStack {
             VStack {
-                Button {
-                    vm.shuffle()
-                } label: {
-                    VarText("Shuffle")
-                }
+                Action("Shuffle") { vm.shuffle() }
                 VarText("the clues as many times as you want")
             }
             .padding(.horizontal)
             .padding(.bottom, 5)
             VStack {
                 VarText("When you are done, go to the")
-                Button {
-                    vm.step = .exclude
-                } label: {
-                    VarText("Exclusion page")
-                }
-                
+                Action("Exclusion page") { vm.step = .exclude }
             }
             .padding(.horizontal)
         }
     }
 
-    // MARK: - exclude
+    // MARK: - excludePage
     
-    private var exclude: some View {
+    private var excludePage: some View {
         VStack {
                 VStack {
                     VarText("You can make your puzzle as hard as you want")
-                    Button {
-                        vm.exclude10()
-                    } label: {
-                        VarText("Exclude 10 numbers")
-                    }
-                    Button {
-                        vm.exclude1()
-                    } label: {
-                        VarText("Exclude 1 number")
-                    }
+                    Action("Exclude 10 numbers") { vm.exclude10() }
+                    Action("Exclude 1 number") { vm.exclude1() }
                     HStack {
                         URButton(.undo)
                         URButton(.redo)
@@ -124,11 +101,9 @@ struct ContentView: View {
             .padding(.bottom, 5)
             VStack {
                 VarText("When done")
-                Button {
+                Action("Lock board and play") {
                     vm.step = .play
                     vm.lock()
-                } label: {
-                    VarText("Lock board and play")
                 }
                 .disabled(!vm.atLeastOneExclusion)
             }
@@ -136,19 +111,15 @@ struct ContentView: View {
             .padding(.bottom, 5)
             VStack {
                 VarText("OR")
-                Button {
-                    vm.step = .shuffle
-                } label: {
-                    VarText("Go back")
-                }
+                Action("Go back") { vm.step = .shuffle }
             }
             .padding(.horizontal)
         }
     }
 
-    // MARK: - play
+    // MARK: - playPage
     
-    private var play: some View {
+    private var playPage: some View {
         VStack {
             HStack {
                 URButton(.undo)
@@ -157,19 +128,15 @@ struct ContentView: View {
             .padding(8)
             VStack {
                 VarText("When you are done, restart")
-                Button {
-                    showAlert = true
-                } label: {
-                    VarText("Restart")
-                }
+                Action("Restart") { showAlert = true }
             }
             .padding(8)
         }
     }
     
-    // MARK: - recap
+    // MARK: - errorPage
     
-    private var error: some View {
+    private var errorPage: some View {
         VStack {
             HStack {
                 URButton(.undo)
@@ -179,18 +146,13 @@ struct ContentView: View {
         }
     }
     
-    // MARK: - recap
+    // MARK: - recapPage
     
-    private var recap: some View {
+    private var recapPage: some View {
         VStack {
             VStack {
                 VarText("When you are done, restart")
-                Button {
-                    showAlert = true
-                } label: {
-                    VarText("Restart")
-                }
-
+                Action("Restart") { showAlert = true }
             }
             .padding(8)
         }

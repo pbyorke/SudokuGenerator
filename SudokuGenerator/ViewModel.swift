@@ -20,13 +20,15 @@ class ViewModel: ObservableObject {
     @Published var selectedRow = -3
     @Published var selectedCol = -3
     @Published var isAllCorrect = false
-    @Published var usedUpSource = [0,0,0,0,0,0,0,0,0,0]
-    @Published var isShowingUsed = false
-    @Published var isShowingReach = false
     @Published var isShowingErrors = false
     @Published var atLeastOneExclusion = false
     @Published var step = PlayStep.shuffle
-    @Published var notes = false
+    
+    var showSource: Bool { step == .play || step == .error}
+    private var stack = Stack()
+    var canUndo: Bool { stack.canUndo }
+    var canRedo: Bool { stack.canRedo }
+    private var noSelection: Bool { selectedRow == -3 || selectedCol == -3 }
     
     @Published var data = [
         [CellData(0,0,1),CellData(0,1,2),CellData(0,2,3),
@@ -96,12 +98,6 @@ class ViewModel: ObservableObject {
          CellData(8,6,6),CellData(8,7,4),CellData(8,8,5)],
     ]
     
-    var showSource: Bool { step == .play || step == .error}
-    private var stack = Stack()
-    var canUndo: Bool { stack.canUndo }
-    var canRedo: Bool { stack.canRedo }
-    private var noSelection: Bool { selectedRow == -3 || selectedCol == -3 }
-
     func tapSource(_ value: Int) {
         if !noSelection {
             if data[selectedRow][selectedCol].value == value {
@@ -114,7 +110,7 @@ class ViewModel: ObservableObject {
             }
         }
     }
-    
+
     private func checkForFilled() {
         if isEverythingFilled() {
             selectedRow = -3
@@ -122,7 +118,7 @@ class ViewModel: ObservableObject {
             if andThereAreNoErrors() {
                 isAllCorrect = true
                 stack.reset()
-                if step != .exclude {
+                if step != .exclude && step != .shuffle {
                     step = .recap
                 }
             } else {
@@ -132,7 +128,7 @@ class ViewModel: ObservableObject {
             step = .play
         }
     }
-    
+
     func tapCell(_ cell: Cell) {
         if step == .play || step == .error {
             if cell.row == selectedRow && cell.col == selectedCol {
@@ -205,8 +201,8 @@ class ViewModel: ObservableObject {
     }
     
     private func isEverythingEmpty() -> Bool {
-        for row in 0...8 {
-            for col in 0...8 {
+        for row in 0..<9 {
+            for col in 0..<9 {
                 if data[row][col].value != 0 {
                     return false
                 }
@@ -249,47 +245,21 @@ class ViewModel: ObservableObject {
         return thereAreDups
     }
 
-    func chooseMyColor(_ cell: Cell) -> Color {
-        switch step {
-        case .play:
-            if data[cell.row][cell.col].clue { return .lockedCell }
-            if noSelection {
-                return .white
-            }
-            return cell.row == selectedRow && cell.col == selectedCol ? .realYellow : .white
-        case .exclude: return data[cell.row][cell.col].clue ? .white : .lightYellow
-        case .recap:
-            if data[cell.row][cell.col].clue {
-                return .lockGreen
-            } else {
-                return .unlockedGreen
-            }
-        case .shuffle: break
-        case .error:
-            if data[cell.row][cell.col].error {
-                if data[cell.row][cell.col].clue {
-                    return .lightRed
-                } else {
-                    return .realRed
-                }
-            } else {
-                return .white
-            }
-        }
-        return .white
-    }
-
     func undo() {
         if let play = stack.undo() {
             data[play.oldCell.row][play.oldCell.col] = play.oldCell
-            checkForFilled()
+            if step != .exclude {
+                checkForFilled()
+            }
         }
     }
     
     func redo() {
         if let play = stack.redo() {
             data[play.newCell.row][play.newCell.col] = play.newCell
-            checkForFilled()
+            if step != .exclude {
+                checkForFilled()
+            }
         }
     }
 
@@ -325,4 +295,34 @@ class ViewModel: ObservableObject {
         isShowingErrors = value
     }
     
+    func chooseMyColor(_ cell: Cell) -> Color {
+        switch step {
+        case .play:
+            if data[cell.row][cell.col].clue { return .lockedCell }
+            if noSelection {
+                return .white
+            }
+            return cell.row == selectedRow && cell.col == selectedCol ? .realYellow : .white
+        case .exclude: return data[cell.row][cell.col].clue ? .white : .lightYellow
+        case .recap:
+            if data[cell.row][cell.col].clue {
+                return .lockGreen
+            } else {
+                return .unlockedGreen
+            }
+        case .shuffle: break
+        case .error:
+            if data[cell.row][cell.col].error {
+                if data[cell.row][cell.col].clue {
+                    return .lightRed
+                } else {
+                    return .realRed
+                }
+            } else {
+                return .white
+            }
+        }
+        return .white
+    }
+
 }

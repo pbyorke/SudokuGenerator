@@ -10,11 +10,15 @@ import Foundation
 class Shuffle {
     
     private var vm = ViewModel.shared
-    
+    private var localData = [[CellData]]()
+        
     func run() {
+        localData = vm.data
         shuffleNumbers()
         shuffleRows()
         shuffleCols()
+        resetAddresses()
+        vm.data = localData
     }
     
     private func shuffleNumbers() {
@@ -27,10 +31,10 @@ class Shuffle {
     private func swapNumbers(_ n1: Int, _ n2: Int) {
         for y in 0..<9 {
             for x in 0..<9 {
-                if vm.data[x][y].value == n1 {
-                    vm.data[x][y].value = n2
-                } else if vm.data[x][y].value == n2 {
-                    vm.data[x][y].value = n1
+                if localData[x][y].value == n1 {
+                    localData[x][y].value = n2
+                } else if localData[x][y].value == n2 {
+                    localData[x][y].value = n1
                 }
             }
         }
@@ -45,9 +49,9 @@ class Shuffle {
     }
 
     private func swapRows(_ r1: Int, _ r2: Int) {
-        let row = vm.data[r1]
-        vm.data[r1] = vm.data[r2]
-        vm.data[r2] = row
+        let row = localData[r1]
+        localData[r1] = localData[r2]
+        localData[r2] = row
     }
 
     private func shuffleCols() {
@@ -60,9 +64,9 @@ class Shuffle {
 
     private func swapCols(_ c1: Int, _ c2: Int) {
         for i in 0..<9 {
-            let colVal = vm.data[i][c1]
-            vm.data[i][c1] = vm.data[i][c2]
-            vm.data[i][c2] = colVal
+            let colVal = localData[i][c1]
+            localData[i][c1] = localData[i][c2]
+            localData[i][c2] = colVal
         }
     }
 
@@ -89,6 +93,15 @@ class Shuffle {
     private func swap3x3Cols(_ c1: Int, _ c2: Int) {
         for i in 0..<3 {
             swapCols(c1 * 3 + i, c2 * 3 + i)
+        }
+    }
+    
+    private func resetAddresses() {
+        for row in 0..<9 {
+            for col in 0..<9 {
+                localData[row][col].row = row
+                localData[row][col].col = col
+            }
         }
     }
         

@@ -25,7 +25,7 @@ struct CellData {
         row =   cell.row
         col =   cell.col
         value = newValue
-        clue =  cell.clue
+        clue =  value != 0
         error = cell.error
     }
     
@@ -39,10 +39,6 @@ struct CellData {
             }
         }
         return false
-    }
-    
-    func dump() {
-        print("CellData row \(row) col \(col) value \(value) clue \(clue ? "true " : "false") error \(error ? "true " : "false")")
     }
     
 }

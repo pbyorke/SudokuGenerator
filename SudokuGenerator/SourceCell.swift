@@ -22,7 +22,7 @@ struct SourceCell: View {
         Text("\(value)")
             .frame(width: width, height: width)
             .font(.system(size: UIDevice.isIPad ? 50 : 27))
-            .background(vm.isShowingUsed ? vm.usedUpSource[value] >= 9 ? Color.lightRed : Color.white : Color.white)
+            .background(Color.white)
             .overlay(
                 RoundedRectangle(cornerRadius: 0)
                     .stroke(lineWidth: 1)

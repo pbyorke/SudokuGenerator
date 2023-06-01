@@ -14,12 +14,4 @@ struct Play {
         newCell = CellData(cell, value)
     }
 
-    func dump() {
-        print("Play")
-        print("  newCell ", terminator: "")
-        oldCell.dump()
-        print("  oldCell ", terminator: "")
-        newCell.dump()
-    }
-    
 }
