@@ -17,12 +17,12 @@ struct SourceCell: View {
     init(value: Int) {
         self.value = value
     }
-    
+
     var body: some View {
         Text("\(value)")
             .frame(width: width, height: width)
             .font(.system(size: UIDevice.isIPad ? 50 : 27))
-            .background(Color.white)
+            .background(vm.used ? vm.usedSource[value] >= 9 ? .red : .white : .white)
             .overlay(
                 RoundedRectangle(cornerRadius: 0)
                     .stroke(lineWidth: 1)

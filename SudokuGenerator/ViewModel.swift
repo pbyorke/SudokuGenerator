@@ -23,7 +23,9 @@ class ViewModel: ObservableObject {
     @Published var isShowingErrors = false
     @Published var atLeastOneExclusion = false
     @Published var step = PlayStep.shuffle
-    
+    @Published var used = false
+    @Published var usedSource = [Int](repeating: 0, count: 10)
+
     var showSource: Bool { step == .play || step == .error}
     private var stack = Stack()
     var canUndo: Bool { stack.canUndo }
@@ -98,6 +100,18 @@ class ViewModel: ObservableObject {
          CellData(8,6,6),CellData(8,7,4),CellData(8,8,5)],
     ]
     
+    func tapCell(_ cell: Cell) {
+        if step == .play || step == .error {
+            if cell.row == selectedRow && cell.col == selectedCol {
+                selectedRow = -3
+                selectedCol = -3
+            } else {
+                selectedRow = cell.row
+                selectedCol = cell.col
+            }
+        }
+    }
+    
     func tapSource(_ value: Int) {
         if !noSelection {
             if data[selectedRow][selectedCol].value == value {
@@ -107,6 +121,16 @@ class ViewModel: ObservableObject {
                 stack.push(Play(data[selectedRow][selectedCol], value))
                 data[selectedRow][selectedCol].value = value
                 checkForFilled()
+            }
+        }
+        evaluateSource()
+    }
+    
+    private func evaluateSource() {
+        for index in 0..<10 { usedSource[index] = 0 }
+        for row in 0..<9 {
+            for col in 0..<9 {
+                usedSource[data[row][col].value] += 1
             }
         }
     }
@@ -129,18 +153,6 @@ class ViewModel: ObservableObject {
         }
     }
 
-    func tapCell(_ cell: Cell) {
-        if step == .play || step == .error {
-            if cell.row == selectedRow && cell.col == selectedCol {
-                selectedRow = -3
-                selectedCol = -3
-            } else {
-                selectedRow = cell.row
-                selectedCol = cell.col
-            }
-        }
-    }
-    
     func shuffle() {
         Shuffle().run()
     }
@@ -182,11 +194,13 @@ class ViewModel: ObservableObject {
         step = .shuffle
         atLeastOneExclusion = false
         stack.reset()
+        used = false
     }
     
     func lock() {
         step = .play
         stack.reset()
+        evaluateSource()
     }
 
     private func isEverythingFilled() -> Bool {

@@ -126,6 +126,10 @@ struct ContentView: View {
                 URButton(.redo)
             }
             .padding(8)
+            Toggle(isOn: $vm.used) {
+                Text("Show used up numbers")
+            }
+            .padding(8)
             VStack {
                 VarText("When you are done, restart")
                 Action("Restart") { showAlert = true }
